@@ -1,0 +1,59 @@
+{
+  "name": "@opendxl/dxl-epo-client",
+  "version": "0.1.0",
+  "author": "McAfee, LLC",
+  "description": "McAfee ePolicy Orchestrator (ePO) DXL client library",
+  "license": "Apache-2.0",
+  "keywords": [
+    "opendxl",
+    "dxl",
+    "mcafee",
+    "client",
+    "epo"
+  ],
+  "files": [
+    "lib",
+    "LICENSE",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=4.0.0"
+  },
+  "dependencies": {
+    "@opendxl/dxl-client": "^0.0.1",
+    "@opendxl/dxl-bootstrap": "^0.1.0"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "jsdoc": "^3.5.5",
+    "jshint": "^2.9.5",
+    "mocha": "^4.1.0",
+    "rimraf": "^2.6.2",
+    "snazzy": "^7.0.0",
+    "standard": "^10.0.3"
+  },
+  "eslintConfig": {},
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/opendxl/opendxl-epo-client-javascript.git"
+  },
+  "scripts": {
+    "predist": "npm install && rimraf *.tgz",
+    "dist": "npm pack && npm run doc && node scripts/dist.js",
+    "test": "mocha --recursive",
+    "lint": "npm run lint:jshint && npm run lint:standard",
+    "lint:jshint": "jshint lib",
+    "lint:standard": "standard | snazzy",
+    "preci": "npm run lint",
+    "ci": "npm run test",
+    "predoc": "rimraf out/jsdoc",
+    "doc": "jsdoc -c ./doc/conf.json doc/index.md -r lib/ -u doc/sdk -d out/jsdoc",
+    "postdoc": "node scripts/postdoc.js"
+  },
+  "standard": {
+    "env": [
+      "mocha"
+    ]
+  }
+}
