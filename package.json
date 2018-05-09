@@ -43,7 +43,7 @@
     "dist": "npm pack && npm run doc && node scripts/dist.js",
     "test": "mocha --recursive",
     "lint": "npm run lint:jshint && npm run lint:standard",
-    "lint:jshint": "jshint lib",
+    "lint:jshint": "jshint lib sample scripts",
     "lint:standard": "standard | snazzy",
     "preci": "npm run lint",
     "ci": "npm run test",

@@ -31,7 +31,8 @@ client.connect(function () {
             if (searchError) {
               console.log('Error finding system: ' + searchError.message)
             } else {
-              var responseObj = MessageUtils.jsonToObject(responseText)
+              var responseObj = MessageUtils.jsonToObject(
+                MessageUtils.decode(responseText))
               console.log(MessageUtils.objectToJson(responseObj, true))
             }
           },
