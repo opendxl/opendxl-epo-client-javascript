@@ -21,7 +21,8 @@
   },
   "dependencies": {
     "@opendxl/dxl-client": "^0.0.1",
-    "@opendxl/dxl-bootstrap": "^0.1.0"
+    "@opendxl/dxl-bootstrap": "^0.1.0",
+    "inherits": "^2.0.3"
   },
   "devDependencies": {
     "chai": "^4.1.2",
