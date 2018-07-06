@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: epo-client.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: epo-client.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict'
+
+var inherits = require('inherits')
+var dxl = require('@opendxl/dxl-client')
+var Request = dxl.Request
+var bootstrap = require('@opendxl/dxl-bootstrap')
+var Client = bootstrap.Client
+var MessageUtils = bootstrap.MessageUtils
+var OutputFormat = require('./output-format')
+
+var DXL_SERVICE_TYPE = '/mcafee/service/epo/remote'
+var DXL_REQUEST_PREFIX = DXL_SERVICE_TYPE + '/'
+var DXL_SERVICE_REGISTRY_QUERY_TOPIC = '/mcafee/service/dxl/svcregistry/query'
+var EPO_THREAT_EVENT_TOPIC = '/mcafee/event/epo/threat/response'
+
+var EPO_HELP_COMMAND = 'core.help'
+
+/**
+ * @classdesc Responsible for all communication with the
+ * Data Exchange Layer (DXL) fabric.
+ * @external DxlClient
+ * @see {@link https://opendxl.github.io/opendxl-client-javascript/jsdoc/Client.html}
+ */
+
+/**
+ * @classdesc A general Data Exchange Layer (DXL) exception.
+ * @external DxlError
+ * @see {@link https://opendxl.github.io/opendxl-client-javascript/jsdoc/DxlError.html}
+ */
+
+/**
+ * @classdesc Event messages are sent using the
+ * [sendEvent]{@link https://opendxl.github.io/opendxl-client-javascript/jsdoc/Client.html#sendEvent} method of a client
+ * instance.
+ * @external Event
+ * @see {@link https://opendxl.github.io/opendxl-client-javascript/jsdoc/Event.html}
+ */
+
+/**
+ * @classdesc This client provides a high level wrapper for invoking ePO remote
+ * commands via the Data Exchange Layer (DXL) fabric.
+ *
+ * The purpose of this library is to allow users to invoke ePO remote commands
+ * without having to focus on lower-level details such as ePO-specific DXL
+ * topics and message formats.
+ *
+ * **ePO Unique Identifier**
+ *
+ * DXL supports communicating with multiple ePO servers on a single DXL fabric.
+ * However, each instance of this client can only be associated with one ePO
+ * server (the server it will be invoking remote commands on).
+ *
+ * The ePO unique identifier specified must match the identifier that was
+ * associated with the particular ePO when a corresponding ePO DXL service was
+ * started.
+ *
+ * If only one ePO server is connected to the DXL fabric this parameter is
+ * optional (the client will automatically determine the ePO's unique
+ * identifier).
+ *
+ * The {@link EpoClient.lookupEpoUniqueIdentifiers} method can be used to determine the
+ * unique identifiers for ePO servers that are currently exposed to the fabric.
+ *
+ * @param {external:DxlClient} dxlClient - The DXL client to use for
+ *   communication with the ePO DXL service
+ * @param {String} [epoUniqueId=null] - The unique identifier used to specify
+ *   the ePO server that this client will communicate with.
+ * @param {Function} [callback=null] - Callback function which should be invoked
+ *   after the ePO unique identifier has been determined and the client is
+ *   ready to use.
+ * @constructor
+ */
+function EpoClient (dxlClient, epoUniqueId, callback) {
+  var that = this
+
+  Client.call(this, dxlClient)
+
+  this._epoIdSearchStatus =
+    'ePO unique identifier not yet determined'
+  this._epoUniqueId = epoUniqueId
+
+  /**
+   * Lookup the ePO unique identifier.
+   * @param {Function} [callback=null] - Callback function which should be
+   *   invoked after the ePO unique identifier has been determined and the
+   *   client is ready to use.
+   * @throws {Error} If either no unique identifier or more than one unique
+   *   identifier can be found.
+   * @private
+   */
+  this._getEpoId = function (callback) {
+    EpoClient.lookupEpoUniqueIdentifiers(dxlClient,
+      function (error, epoUniqueIds) {
+        if (epoUniqueIds) {
+          switch (epoUniqueIds.length) {
+            case 0:
+              error = new Error(
+                'No ePO DXL services are registered with the DXL fabric')
+              break
+            case 1:
+              that._epoUniqueId = epoUniqueIds[0]
+              break
+            default:
+              error = new Error(
+                'Multiple ePO DXL services are registered with the DXL fabric' +
+                ' (' + epoUniqueIds + ').' +
+                ' A specific ePO unique identifier must be specified.'
+              )
+          }
+        }
+        that._epoIdSearchStatus =
+          error ? error.message : 'ePO id found'
+        if (callback) {
+          callback(error)
+        }
+      })
+  }
+
+  if (!epoUniqueId) {
+    if (dxlClient.connected) {
+      this._getEpoId(callback)
+    } else {
+      dxlClient.once('connect', function () { that._getEpoId(callback) })
+    }
+  } else {
+    if (callback) {
+      setImmediate(callback)
+    }
+  }
+}
+
+inherits(EpoClient, Client)
+
+/**
+ * Returns an array of strings containing the unique identifiers for the ePO
+ * servers that are currently exposed to the DXL fabric.
+ * @param {external:DxlClient} dxlClient - The DXL client with which to perform
+ *   the request
+ * @param {Function} callback - Callback function to invoke with the unique
+ *   identifiers which are found. If an error occurs when performing the lookup,
+ *   the first parameter supplied to the callback contains a
+ *   [DxlError]{@link external:DxlError} with failure details. On successful
+ *   lookup, the array of unique identifier strings is provided as the second
+ *   parameter to the callback.
+ */
+EpoClient.lookupEpoUniqueIdentifiers = function (dxlClient, callback) {
+  var request = new Request(DXL_SERVICE_REGISTRY_QUERY_TOPIC)
+  MessageUtils.objectToJsonPayload(request, {serviceType: DXL_SERVICE_TYPE})
+  dxlClient.asyncRequest(request, function (error, response) {
+    var returnIds = null
+    if (response) {
+      try {
+        var responseObj = MessageUtils.jsonPayloadToObject(response)
+        returnIds = []
+        var services = responseObj.services
+        if (services) {
+          Object.keys(services).forEach(function (serviceKey) {
+            var requestChannels = services[serviceKey].requestChannels
+            if (requestChannels) {
+              requestChannels.forEach(function (channel) {
+                if (channel.startsWith(DXL_REQUEST_PREFIX)) {
+                  returnIds.push(channel.substring(DXL_REQUEST_PREFIX.length))
+                }
+              })
+            }
+          })
+        }
+      } catch (err) {
+        error = err
+      }
+    }
+    callback(error, returnIds)
+  })
+}
+
+/**
+ * Returns the list of remote commands that are supported by the ePO server
+ * this client is communicating with.
+ * @param {Function} callback - Callback function to invoke with the remote
+ *   commands which are found. If an error occurs when performing the command,
+ *   the first parameter supplied to the callback contains a
+ *   [DxlError]{@link external:DxlError} with failure details. On successful
+ *   execution of the command, the remote command output is provided as the
+ *   second parameter to the callback.
+ * @param {String} outputFormat - The output format for ePO to use when
+ *   returning the response. The list of `output formats` can be found in the
+ *   [OutputFormat]{@link module:OutputFormat} constants module.
+ * @throws {TypeError} If the `outputFormat` is not valid.
+ * @example &lt;caption>Example Usage&lt;/caption>
+ * epoClient.help(function (helpError, helpText) {
+ *   if (helpError) {
+ *     console.log('Error getting help: ' + helpError.message)
+ *   } else {
+ *     console.log(helpText)
+ *   }
+ * })
+ * @example &lt;caption>Example Response Text&lt;/caption>
+ * ComputerMgmt.createAgentDeploymentUrlCmd deployPath groupId [edit] [ahId]
+ * [fallBackAhId] [urlName] [agentVersionNumber] [agentHotFix] - Create Agent
+ * Deployment URL Command
+ * ComputerMgmt.createCustomInstallPackageCmd deployPath [ahId] [fallBackAhId] -
+ * Create Custom Install Package Command
+ * ComputerMgmt.createDefaultAgentDeploymentUrlCmd tenantId - Create Default
+ * Non-Editable Agent Deployment URL Command
+ * ComputerMgmt.createTagGroup parentTagGroupId newTagGroupName - Create a new
+ * subgroup under an existing tag group.
+ * ComputerMgmt.deleteTag tagIds [forceDelete] - Delete one or more tags.
+ */
+EpoClient.prototype.help = function (callback, outputFormat) {
+  this.runCommand(EPO_HELP_COMMAND,
+    callback, {}, outputFormat || OutputFormat.VERBOSE)
+}
+
+/**
+ * Invokes an ePO remote command on the ePO server this client is communicating
+ * with.
+ * @param {String} commandName - The name of the remote command to invoke.
+ * @param {Function} callback - Callback function to invoke with the results of
+ *   the remote command. If an error occurs when performing the command,
+ *   the first parameter supplied to the callback contains a
+ *   [DxlError]{@link external:DxlError} with failure details. On successful
+ *   execution of the command, the remote command output is provided as the
+ *   second parameter to the callback.
+ * @param {Object} params - An object containing the parameters for the command.
+ * @param {String} outputFormat - The output format for ePO to use when
+ *   returning the response. The list of `output formats` can be found in the
+ *   [OutputFormat]{@link module:OutputFormat} constants module.
+ * @throws {TypeError} If the `outputFormat` is not valid.
+ * @example &lt;caption>Example Usage&lt;/caption>
+ * epoClient.runCommand('system.find',
+ *   function (searchError, responseText) {
+ *     if (searchError) {
+ *       console.log('Error finding system: ' + searchError.message)
+ *     } else {
+ *       console.log(responseText)
+ *     }
+ *   },
+ *   {searchText: 'mySystem'},
+ *   OutputFormat.JSON
+ * )
+ * @example &lt;caption>Example Response Text&lt;/caption>
+ * [
+ *   {
+ *     "EPOBranchNode.AutoID": 7,
+ *     "EPOComputerProperties.CPUSerialNum": "N/A",
+ *     "EPOComputerProperties.CPUSpeed": 2794,
+ *     "EPOComputerProperties.CPUType": "Intel(R) Core(TM) i7-4980HQ CPU @ 2.80GHz",
+ *     "EPOComputerProperties.ComputerName": "mySystemForTesting",
+ *     "EPOComputerProperties.DefaultLangID": "0409",
+ *    ...
+ *   }
+ * ]
+ */
+EpoClient.prototype.runCommand = function (commandName, callback,
+                                           params, outputFormat) {
+  params = params || {}
+  if (outputFormat) {
+    OutputFormat.validate(outputFormat)
+  } else {
+    outputFormat = OutputFormat.JSON
+  }
+
+  if (this._epoUniqueId) {
+    var request = new Request(DXL_REQUEST_PREFIX + this._epoUniqueId)
+    MessageUtils.objectToJsonPayload(request, {
+      command: commandName,
+      output: outputFormat,
+      params: params
+    })
+    this._dxlClient.asyncRequest(request, function (error, response) {
+      callback(error, response ? response.payload : null)
+    })
+  } else {
+    callback(new Error(this._epoIdSearchStatus))
+  }
+}
+
+/**
+ * Registers an event callback with the client to receive ePO threat events.
+ * @param {Function} threatEventResponseCallback - The function that will
+ *   receive ePO threat events. The first argument passed to the callback
+ *   function is an object decoded from the JSON payload of the event content.
+ *   The second argument passed to the callback function is the full DXL
+ *   [Event]{@link external:Event} object.
+ * @param {String} [topic=/mcafee/event/epo/threat/response] - The topic that
+ *   ePO threat events are published to.
+ * @example
+ * epoClient.addThreatEventCallback(function (threatEventObj, originalEvent) {
+ *   console.log('Threat event on topic: ' + originalEvent.destinationTopic)
+ *   console.log(threatEventObj)
+ * })
+ */
+EpoClient.prototype.addThreatEventCallback =
+  function (threatEventResponseCallback, topic) {
+    this._dxlClient.addEventCallback(topic || EPO_THREAT_EVENT_TOPIC,
+      function (event) {
+        var payload = MessageUtils.jsonPayloadToObject(event)
+        threatEventResponseCallback(payload, event)
+      })
+  }
+
+/**
+ * Unregisters an event callback from the client so that it will no longer
+ * receive ePO threat events.
+ * @param {Function} threatEventResponseCallback - The function to unregister.
+ * @param {String} [topic=/mcafee/event/epo/threat/response] - The topic that
+ *   ePO threat events are published to.
+ */
+EpoClient.prototype.removeThreatEventCallback =
+  function (threatEventResponseCallback, topic) {
+    this._dxlClient.removeEventCallback(
+      topic || EPO_THREAT_EVENT_TOPIC, threatEventResponseCallback)
+  }
+
+module.exports = EpoClient
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-OutputFormat.html">OutputFormat</a></li></ul><h3>Externals</h3><ul><li><a href="external-DxlClient.html">DxlClient</a></li><li><a href="external-DxlError.html">DxlError</a></li><li><a href="external-Event.html">Event</a></li></ul><h3>Classes</h3><ul><li><a href="EpoClient.html">EpoClient</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-installation.html">Installation</a></li><li><a href="tutorial-samples.html">Samples</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

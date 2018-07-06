@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Tutorial: Basic Core Help Example</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Tutorial: Basic Core Help Example</h1>
+
+    <section>
+
+<header>
+    
+
+    <h2>Basic Core Help Example</h2>
+</header>
+
+<article>
+    <p>This sample invokes and displays the results of the &quot;core help&quot; remote command
+via the ePO DXL service. The &quot;core help&quot; command lists the remote commands that
+are exposed by a particular ePO server.</p>
+<h3>Prerequisites</h3><ul>
+<li>The samples configuration step has been completed (see <a href="tutorial-samples.html">Samples</a>).</li>
+<li>The ePO DXL service is running and available on the fabric (see
+<a href="https://github.com/opendxl/opendxl-epo-service-python">ePO DXL Python Service</a>).</li>
+<li>The client is authorized to invoke the ePO DXL Service (see 
+<a href="https://opendxl.github.io/opendxl-epo-service-python/pydoc/authorization.html#client-authorization">ePO DXL Service Client Authorization</a>).</li>
+</ul>
+<h3>Setup</h3><p>Modify the example to include the <code>unique identifier</code> associated with the ePO
+to invoke the remote command on.</p>
+<p>For more information on the ePO unique identifier, refer to the following:</p>
+<ul>
+<li><a href="https://opendxl.github.io/opendxl-epo-service-python/pydoc/configuration.html#dxl-service-configuration-file-dxleposervice-config">Configuration File for ePO DXL Python Service (uniqueId property)</a></li>
+<li>The <a href="EpoClient.html#.lookupEpoUniqueIdentifiers">EpoClient.lookupEpoUniqueIdentifiers()</a>
+method which will return an array of strings containing the identifiers for
+all ePO servers that are currently connected to the fabric.</li>
+</ul>
+<p>For example:</p>
+<pre class="prettyprint source lang-js"><code>var EPO_UNIQUE_ID = 'epo1'</code></pre><p>If only one ePO server is connected to the DXL fabric this constant can be
+set to <code>null</code> (the client will automatically determine the ePO's unique
+identifier).</p>
+<h3>Running</h3><p>To run this sample execute the <code>sample/basic/basic-core-help-example.js</code>
+script as follows:</p>
+<pre class="prettyprint source lang-sh"><code>$ node sample/basic/basic-core-help-example.js</code></pre><p>The output should appear similar to the following:</p>
+<pre class="prettyprint source"><code>ComputerMgmt.createAgentDeploymentUrlCmd deployPath groupId [edit] [ahId]
+[fallBackAhId] [urlName] [agentVersionNumber] [agentHotFix] - Create Agent
+Deployment URL Command
+ComputerMgmt.createCustomInstallPackageCmd deployPath [ahId] [fallBackAhId] -
+Create Custom Install Package Command
+ComputerMgmt.createDefaultAgentDeploymentUrlCmd tenantId - Create Default
+Non-Editable Agent Deployment URL Command
+ComputerMgmt.createTagGroup parentTagGroupId newTagGroupName - Create a new
+subgroup under an existing tag group.
+ComputerMgmt.deleteTag tagIds [forceDelete] - Delete one or more tags.
+ComputerMgmt.deleteTagGroup tagGroupIds [deleteTags] - Delete one or more Tag
+Groups.
+ComputerMgmt.listAllTagGroups - List All Tag Groups in Tag Group Tree
+ComputerMgmt.moveTagsToTagGroup tagIds tagGroupId - Move tags to an existing tag
+group.
+...</code></pre><p>Each remote command exposed by the particular ePO server is listed along with
+its associated parameters.</p>
+<h3>Details</h3><p>The majority of the sample code is shown below:</p>
+<pre class="prettyprint source lang-js"><code>// The ePO unique identifier
+var EPO_UNIQUE_ID = null
+
+// Connect to the fabric, supplying a callback function which is invoked
+// when the connection has been established
+client.connect(function () {
+  // Create the ePO client
+  var epoClient = new EpoClient(client, EPO_UNIQUE_ID,
+    function (clientError) {
+      if (clientError) {
+        // Destroy the client - frees up resources so that the application
+        // stops running
+        client.destroy()
+        console.log('Error creating ePO client: ' + clientError.message)
+      } else {
+        // Run the help command
+        epoClient.help(function (helpError, helpText) {
+          // Destroy the client - frees up resources so that the application
+          // stops running
+          client.destroy()
+          if (helpError) {
+            console.log('Error getting help: ' + helpError.message)
+          } else {
+            // Display the help
+            console.log(MessageUtils.decode(helpText))
+          }
+        })
+      }
+    }
+  )
+})</code></pre><p>Once a connection is established to the DXL fabric, the callback function
+supplied to the DXL client instance's
+<a href="https://opendxl.github.io/opendxl-client-javascript/jsdoc/Client.html#connect">connect()</a>
+method will be invoked. From within the callback function, an <a href="EpoClient.html">EpoClient</a>
+instance is created. The EpoClient instance will be used to invoke remote
+commands on the ePO server. The <code>unique identifier</code> of the ePO server to invoke
+remote commands on is specified as an parameter to the client constructor. In
+this particular case, a value of <code>null</code> is specified, which triggers the client
+to automatically determine the ePO server's unique identifier. This will not
+work if multiple ePO servers are connected to the fabric (an error will be
+delivered in the <code>clientError</code> parameter passed into the callback function).</p>
+<p>Next, the EpoClient instance's <a href="EpoClient.html#help">help()</a> method is called
+to invoke the <code>help</code> remote command on the ePO server. On successful execution
+of the ePO remote command, the <code>helpText</code> parameter provided to the callback
+function contains the command results.</p>
+<p>The <code>helpText</code> parameter should be a binary
+<a href="https://nodejs.org/api/buffer.html">Buffer</a>. The
+<a href="https://opendxl.github.io/opendxl-bootstrap-javascript/jsdoc/module-MessageUtils.html#.decode">MessageUtils.decode()</a>
+method is invoked to convert the Buffer into a String, which is then displayed
+to the console.</p>
+</article>
+
+</section>
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-OutputFormat.html">OutputFormat</a></li></ul><h3>Externals</h3><ul><li><a href="external-DxlClient.html">DxlClient</a></li><li><a href="external-DxlError.html">DxlError</a></li><li><a href="external-Event.html">Event</a></li></ul><h3>Classes</h3><ul><li><a href="EpoClient.html">EpoClient</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-installation.html">Installation</a></li><li><a href="tutorial-samples.html">Samples</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

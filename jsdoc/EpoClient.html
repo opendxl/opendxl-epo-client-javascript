@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: EpoClient</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Class: EpoClient</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2><span class="attribs"><span class="type-signature"></span></span>EpoClient<span class="signature">(dxlClient, epoUniqueId<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h2>
+        
+            <div class="class-description"><p>This client provides a high level wrapper for invoking ePO remote
+commands via the Data Exchange Layer (DXL) fabric.</p>
+<p>The purpose of this library is to allow users to invoke ePO remote commands
+without having to focus on lower-level details such as ePO-specific DXL
+topics and message formats.</p>
+<p><strong>ePO Unique Identifier</strong></p>
+<p>DXL supports communicating with multiple ePO servers on a single DXL fabric.
+However, each instance of this client can only be associated with one ePO
+server (the server it will be invoking remote commands on).</p>
+<p>The ePO unique identifier specified must match the identifier that was
+associated with the particular ePO when a corresponding ePO DXL service was
+started.</p>
+<p>If only one ePO server is connected to the DXL fabric this parameter is
+optional (the client will automatically determine the ePO's unique
+identifier).</p>
+<p>The <a href="EpoClient.html#.lookupEpoUniqueIdentifiers">EpoClient.lookupEpoUniqueIdentifiers</a> method can be used to determine the
+unique identifiers for ePO servers that are currently exposed to the fabric.</p></div>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+    <h2>Constructor</h2>
+    
+
+    
+    <h4 class="name" id="EpoClient"><span class="type-signature"></span>new EpoClient<span class="signature">(dxlClient, epoUniqueId<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>dxlClient</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-DxlClient.html">external:DxlClient</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>The DXL client to use for
+  communication with the ePO DXL service</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>epoUniqueId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last"><p>The unique identifier used to specify
+  the ePO server that this client will communicate with.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last"><p>Callback function which should be invoked
+  after the ePO unique identifier has been determined and the client is
+  ready to use.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line73">line 73</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".lookupEpoUniqueIdentifiers"><span class="type-signature">(static) </span>lookupEpoUniqueIdentifiers<span class="signature">(dxlClient, callback)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Returns an array of strings containing the unique identifiers for the ePO
+servers that are currently exposed to the DXL fabric.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>dxlClient</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-DxlClient.html">external:DxlClient</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The DXL client with which to perform
+  the request</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Callback function to invoke with the unique
+  identifiers which are found. If an error occurs when performing the lookup,
+  the first parameter supplied to the callback contains a
+  <a href="external-DxlError.html">DxlError</a> with failure details. On successful
+  lookup, the array of unique identifier strings is provided as the second
+  parameter to the callback.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line146">line 146</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="addThreatEventCallback"><span class="type-signature"></span>addThreatEventCallback<span class="signature">(threatEventResponseCallback, topic<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Registers an event callback with the client to receive ePO threat events.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>threatEventResponseCallback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>The function that will
+  receive ePO threat events. The first argument passed to the callback
+  function is an object decoded from the JSON payload of the event content.
+  The second argument passed to the callback function is the full DXL
+  <a href="external-Event.html">Event</a> object.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>topic</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    /mcafee/event/epo/threat/response
+                
+                </td>
+            
+
+            <td class="description last"><p>The topic that
+  ePO threat events are published to.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line293">line 293</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>epoClient.addThreatEventCallback(function (threatEventObj, originalEvent) {
+  console.log('Threat event on topic: ' + originalEvent.destinationTopic)
+  console.log(threatEventObj)
+})</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="help"><span class="type-signature"></span>help<span class="signature">(callback, outputFormat)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Returns the list of remote commands that are supported by the ePO server
+this client is communicating with.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Callback function to invoke with the remote
+  commands which are found. If an error occurs when performing the command,
+  the first parameter supplied to the callback contains a
+  <a href="external-DxlError.html">DxlError</a> with failure details. On successful
+  execution of the command, the remote command output is provided as the
+  second parameter to the callback.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>outputFormat</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The output format for ePO to use when
+  returning the response. The list of <code>output formats</code> can be found in the
+  <a href="module-OutputFormat.html">OutputFormat</a> constants module.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line209">line 209</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+<h5>Throws:</h5>
+
+        
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        <p>If the <code>outputFormat</code> is not valid.</p>
+        </div>
+    </dt>
+    <dd></dd>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type">TypeError</span>
+
+
+            </dd>
+        </dl>
+    </dt>
+    <dd></dd>
+</dl>
+
+
+    
+
+
+
+
+
+
+    <h5>Examples</h5>
+    
+        <p class="code-caption">Example Usage</p>
+    
+    <pre class="prettyprint"><code>epoClient.help(function (helpError, helpText) {
+  if (helpError) {
+    console.log('Error getting help: ' + helpError.message)
+  } else {
+    console.log(helpText)
+  }
+})</code></pre>
+
+        <p class="code-caption">Example Response Text</p>
+    
+    <pre class="prettyprint"><code>ComputerMgmt.createAgentDeploymentUrlCmd deployPath groupId [edit] [ahId]
+[fallBackAhId] [urlName] [agentVersionNumber] [agentHotFix] - Create Agent
+Deployment URL Command
+ComputerMgmt.createCustomInstallPackageCmd deployPath [ahId] [fallBackAhId] -
+Create Custom Install Package Command
+ComputerMgmt.createDefaultAgentDeploymentUrlCmd tenantId - Create Default
+Non-Editable Agent Deployment URL Command
+ComputerMgmt.createTagGroup parentTagGroupId newTagGroupName - Create a new
+subgroup under an existing tag group.
+ComputerMgmt.deleteTag tagIds [forceDelete] - Delete one or more tags.</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="removeThreatEventCallback"><span class="type-signature"></span>removeThreatEventCallback<span class="signature">(threatEventResponseCallback, topic<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Unregisters an event callback from the client so that it will no longer
+receive ePO threat events.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>threatEventResponseCallback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>The function to unregister.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>topic</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    /mcafee/event/epo/threat/response
+                
+                </td>
+            
+
+            <td class="description last"><p>The topic that
+  ePO threat events are published to.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line309">line 309</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="runCommand"><span class="type-signature"></span>runCommand<span class="signature">(commandName, callback, params, outputFormat)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Invokes an ePO remote command on the ePO server this client is communicating
+with.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>commandName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The name of the remote command to invoke.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Callback function to invoke with the results of
+  the remote command. If an error occurs when performing the command,
+  the first parameter supplied to the callback contains a
+  <a href="external-DxlError.html">DxlError</a> with failure details. On successful
+  execution of the command, the remote command output is provided as the
+  second parameter to the callback.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An object containing the parameters for the command.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>outputFormat</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The output format for ePO to use when
+  returning the response. The list of <code>output formats</code> can be found in the
+  <a href="module-OutputFormat.html">OutputFormat</a> constants module.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line254">line 254</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+<h5>Throws:</h5>
+
+        
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        <p>If the <code>outputFormat</code> is not valid.</p>
+        </div>
+    </dt>
+    <dd></dd>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type">TypeError</span>
+
+
+            </dd>
+        </dl>
+    </dt>
+    <dd></dd>
+</dl>
+
+
+    
+
+
+
+
+
+
+    <h5>Examples</h5>
+    
+        <p class="code-caption">Example Usage</p>
+    
+    <pre class="prettyprint"><code>epoClient.runCommand('system.find',
+  function (searchError, responseText) {
+    if (searchError) {
+      console.log('Error finding system: ' + searchError.message)
+    } else {
+      console.log(responseText)
+    }
+  },
+  {searchText: 'mySystem'},
+  OutputFormat.JSON
+)</code></pre>
+
+        <p class="code-caption">Example Response Text</p>
+    
+    <pre class="prettyprint"><code>[
+  {
+    "EPOBranchNode.AutoID": 7,
+    "EPOComputerProperties.CPUSerialNum": "N/A",
+    "EPOComputerProperties.CPUSpeed": 2794,
+    "EPOComputerProperties.CPUType": "Intel(R) Core(TM) i7-4980HQ CPU @ 2.80GHz",
+    "EPOComputerProperties.ComputerName": "mySystemForTesting",
+    "EPOComputerProperties.DefaultLangID": "0409",
+   ...
+  }
+]</code></pre>
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-OutputFormat.html">OutputFormat</a></li></ul><h3>Externals</h3><ul><li><a href="external-DxlClient.html">DxlClient</a></li><li><a href="external-DxlError.html">DxlError</a></li><li><a href="external-Event.html">Event</a></li></ul><h3>Classes</h3><ul><li><a href="EpoClient.html">EpoClient</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-installation.html">Installation</a></li><li><a href="tutorial-samples.html">Samples</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
