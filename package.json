@@ -25,6 +25,7 @@
     "inherits": "^2.0.3"
   },
   "devDependencies": {
+    "archiver": "^2.1.1",
     "chai": "^4.1.2",
     "jsdoc": "^3.5.5",
     "jshint": "^2.9.5",

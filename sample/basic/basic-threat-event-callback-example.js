@@ -1,5 +1,6 @@
 // This sample demonstrates registering a callback with the DXL fabric to
-// receive threat events when ePO sends them.
+// receive threat events when ePO sends them. The topic and payload for each
+// event which is received is displayed in JSON format.
 
 'use strict'
 

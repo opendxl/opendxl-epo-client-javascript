@@ -1,27 +1,23 @@
 ### Prerequisites
 
-To use the OpenDXL JavaScript Client (Node.js) the following prerequisites must
-be satisfied:
+* OpenDXL JavaScript Client (Node.js) library installed
+  * <https://github.com/opendxl/opendxl-client-javascript>
 
-* DXL brokers (3.0.1 or later) deployed with an ePO managed environment or an
-  [OpenDXL broker](https://github.com/opendxl/opendxl-broker).
+* The OpenDXL JavaScript Client (Node.js) prerequisites must be satisfied
+  * <https://opendxl.github.io/opendxl-client-javascript/jsdoc/tutorial-installation.html>
+
+* McAfee ePolicy Orchestrator (ePO) service is running and available on DXL
+  fabric
+  * <https://github.com/opendxl/opendxl-epo-service-python> (Python-based service implementation)
+
+* OpenDXL JavaScript Client (Node.js) has permission to invoke ePO remote commands
+  * <https://opendxl.github.io/opendxl-epo-service-python/pydoc/authorization.html#client-authorization>
 
 * Node.js 4.0 or higher installed.
 
-  >  **Note:** With versions of Node.js older than 4.8.1, you may encounter an
-  > error with the following text when your client attempts to connect to the
-  > broker:
-
-  ```sh
-  Error: unable to get issuer certificate
-  ```
-
-  > No workaround for this issue on the older Node.js versions is known at this
-  > time.
-
 ### Installation
 
-Before installing the OpenDXL JavaScript Client (Node.js), change to the
+Before installing the ePO DXL JavaScript client library, change to the
 directory which you extracted from the SDK zip file. For example:
 
 ```sh
@@ -42,8 +38,8 @@ npm install lib\{@releasetarballname} --save
 ```
 
 To install the client via the
-[npm package registry](https://www.npmjs.com/package/@opendxl/dxl-client), run:
+[npm package registry](https://www.npmjs.com/package/@opendxl/dxl-epo-client), run:
 
 ```sh
-npm install @opendxl/dxl-client --save
+npm install @opendxl/dxl-epo-client --save
 ```
