@@ -36,11 +36,19 @@ var Client = bootstrap.Client
 var MessageUtils = bootstrap.MessageUtils
 var OutputFormat = require('./output-format')
 
+// The type of the ePO DXL service that is registered with the fabric
 var DXL_SERVICE_TYPE = '/mcafee/service/epo/remote'
+
+// The prefix for ePO DXL service request topics
 var DXL_REQUEST_PREFIX = DXL_SERVICE_TYPE + '/'
+
+// The DXL topic to query for registered ePO service instances
 var DXL_SERVICE_REGISTRY_QUERY_TOPIC = '/mcafee/service/dxl/svcregistry/query'
+
+// The default DXL topic to listen to for ePO threat event messages
 var EPO_THREAT_EVENT_TOPIC = '/mcafee/event/epo/threat/response'
 
+// The name of the ePO 'help' remote command
 var EPO_HELP_COMMAND = 'core.help'
 
 /**
@@ -48,12 +56,6 @@ var EPO_HELP_COMMAND = 'core.help'
  * Data Exchange Layer (DXL) fabric.
  * @external DxlClient
  * @see {@link https://opendxl.github.io/opendxl-client-javascript/jsdoc/Client.html}
- */
-
-/**
- * @classdesc A general Data Exchange Layer (DXL) exception.
- * @external DxlError
- * @see {@link https://opendxl.github.io/opendxl-client-javascript/jsdoc/DxlError.html}
  */
 
 /**
@@ -166,10 +168,9 @@ inherits(EpoClient, Client)
  *   the request
  * @param {Function} callback - Callback function to invoke with the unique
  *   identifiers which are found. If an error occurs when performing the lookup,
- *   the first parameter supplied to the callback contains a
- *   [DxlError]{@link external:DxlError} with failure details. On successful
- *   lookup, the array of unique identifier strings is provided as the second
- *   parameter to the callback.
+ *   the first parameter supplied to the callback contains an `Error` object
+ *   with failure details. On successful lookup, the array of unique identifier
+ *   strings is provided as the second parameter to the callback.
  */
 EpoClient.lookupEpoUniqueIdentifiers = function (dxlClient, callback) {
   var request = new Request(DXL_SERVICE_REGISTRY_QUERY_TOPIC)
@@ -206,10 +207,9 @@ EpoClient.lookupEpoUniqueIdentifiers = function (dxlClient, callback) {
  * this client is communicating with.
  * @param {Function} callback - Callback function to invoke with the remote
  *   commands which are found. If an error occurs when performing the command,
- *   the first parameter supplied to the callback contains a
- *   [DxlError]{@link external:DxlError} with failure details. On successful
- *   execution of the command, the remote command output is provided as the
- *   second parameter to the callback.
+ *   the first parameter supplied to the callback contains an `Error` object
+ *   with failure details. On successful execution of the command, the remote
+ *   command output is provided as the second parameter to the callback.
  * @param {String} outputFormat - The output format for ePO to use when
  *   returning the response. The list of `output formats` can be found in the
  *   [OutputFormat]{@link module:OutputFormat} constants module.
@@ -245,10 +245,9 @@ EpoClient.prototype.help = function (callback, outputFormat) {
  * @param {String} commandName - The name of the remote command to invoke.
  * @param {Function} callback - Callback function to invoke with the results of
  *   the remote command. If an error occurs when performing the command,
- *   the first parameter supplied to the callback contains a
- *   [DxlError]{@link external:DxlError} with failure details. On successful
- *   execution of the command, the remote command output is provided as the
- *   second parameter to the callback.
+ *   the first parameter supplied to the callback contains an `Error` object
+ *   with failure details. On successful execution of the command, the remote
+ *   command output is provided as the second parameter to the callback.
  * @param {Object} params - An object containing the parameters for the command.
  * @param {String} outputFormat - The output format for ePO to use when
  *   returning the response. The list of `output formats` can be found in the
@@ -351,7 +350,7 @@ module.exports = EpoClient
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-OutputFormat.html">OutputFormat</a></li></ul><h3>Externals</h3><ul><li><a href="external-DxlClient.html">DxlClient</a></li><li><a href="external-DxlError.html">DxlError</a></li><li><a href="external-Event.html">Event</a></li></ul><h3>Classes</h3><ul><li><a href="EpoClient.html">EpoClient</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-installation.html">Installation</a></li><li><a href="tutorial-samples.html">Samples</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-OutputFormat.html">OutputFormat</a></li></ul><h3>Externals</h3><ul><li><a href="external-DxlClient.html">DxlClient</a></li><li><a href="external-Event.html">Event</a></li></ul><h3>Classes</h3><ul><li><a href="EpoClient.html">EpoClient</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-installation.html">Installation</a></li><li><a href="tutorial-samples.html">Samples</a></li></ul>
 </nav>
 
 <br class="clear">
