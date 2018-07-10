@@ -75,6 +75,9 @@ The properties for each system found will be displayed.
 The majority of the sample code is shown below:
 
 ```js
+// Create the client
+var client = new dxl.Client(config)
+
 // The ePO unique identifier
 var EPO_UNIQUE_ID = null
 

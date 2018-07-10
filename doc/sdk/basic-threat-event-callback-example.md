@@ -38,6 +38,9 @@ Threat event on topic: /mcafee/event/epo/threat/response
 The majority of the sample code is shown below:
 
 ```js
+// Create the client
+var client = new dxl.Client(config)
+
 // Connect to the fabric, supplying a callback function which is invoked
 // when the connection has been established
 client.connect(function () {
