@@ -44,7 +44,10 @@ should appear with the console that the sample is running (similar to the
 output below):</p>
 <pre class="prettyprint source"><code>Threat event on topic: /mcafee/event/epo/threat/response
 &lt;event json...> </code></pre><h3>Details</h3><p>The majority of the sample code is shown below:</p>
-<pre class="prettyprint source lang-js"><code>// Connect to the fabric, supplying a callback function which is invoked
+<pre class="prettyprint source lang-js"><code>// Create the client
+var client = new dxl.Client(config)
+
+// Connect to the fabric, supplying a callback function which is invoked
 // when the connection has been established
 client.connect(function () {
   // Create the ePO client

@@ -72,7 +72,10 @@ group.
 ...</code></pre><p>Each remote command exposed by the particular ePO server is listed along with
 its associated parameters.</p>
 <h3>Details</h3><p>The majority of the sample code is shown below:</p>
-<pre class="prettyprint source lang-js"><code>// The ePO unique identifier
+<pre class="prettyprint source lang-js"><code>// Create the client
+var client = new dxl.Client(config)
+
+// The ePO unique identifier
 var EPO_UNIQUE_ID = null
 
 // Connect to the fabric, supplying a callback function which is invoked
