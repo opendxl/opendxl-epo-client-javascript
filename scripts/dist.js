@@ -16,7 +16,7 @@ if (!VERSION || !PACKAGE_NAME) {
 
 var TARBALL_NAME = PACKAGE_NAME.replace(/^@/, '').replace('/', '-') +
   '-' + VERSION + '.tgz'
-var RELEASE_ZIP_NAME = 'dxlepoclient-javascript-sdk-' + VERSION
+var RELEASE_ZIP_NAME = 'dxlepoclient-javascript-dist-' + VERSION
 var RELEASE_ZIP = RELEASE_ZIP_NAME + '.zip'
 
 var DOC_SOURCE_DIR = path.join('out', 'jsdoc')
