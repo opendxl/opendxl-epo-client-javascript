@@ -5,10 +5,9 @@
 'use strict'
 
 var common = require('../common')
-var dxl = require('@opendxl/dxl-client')
-var epo = common.requireEpoClient()
-var MessageUtils = require('@opendxl/dxl-bootstrap').MessageUtils
-var EpoClient = epo.EpoClient
+var dxl = common.require('@opendxl/dxl-client')
+var MessageUtils = common.require('@opendxl/dxl-bootstrap').MessageUtils
+var EpoClient = common.require('@opendxl/dxl-epo-client').EpoClient
 
 // Create DXL configuration from file
 var config = dxl.Config.createDxlConfigFromFile(common.CONFIG_FILE)

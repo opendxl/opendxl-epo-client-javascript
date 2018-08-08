@@ -17,9 +17,9 @@
 'use strict'
 
 var common = require('../common')
-var dxl = require('@opendxl/dxl-client')
-var epo = common.requireEpoClient()
-var MessageUtils = require('@opendxl/dxl-bootstrap').MessageUtils
+var dxl = common.require('@opendxl/dxl-client')
+var MessageUtils = common.require('@opendxl/dxl-bootstrap').MessageUtils
+var epo = common.require('@opendxl/dxl-epo-client')
 var EpoClient = epo.EpoClient
 var OutputFormat = epo.OutputFormat
 
