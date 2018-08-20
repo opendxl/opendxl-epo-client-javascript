@@ -98,22 +98,18 @@ client.connect(function () {
       } else {
         // Run the system find command
         epoClient.runCommand('system.find',
-          function (searchError, responseText) {
+          function (searchError, responseObj) {
             // Destroy the client - frees up resources so that the application
             // stops running
             client.destroy()
             if (searchError) {
               console.log('Error finding system: ' + searchError.message)
             } else {
-              // Load find result into object
-              var responseObj = MessageUtils.jsonToObject(
-                MessageUtils.decode(responseText))
               // Display the results
               console.log(MessageUtils.objectToJson(responseObj, true))
             }
           },
-          {searchText: SEARCH_TEXT},
-          OutputFormat.JSON
+          {params: {searchText: SEARCH_TEXT}}
         )
       }
     }
@@ -135,18 +131,10 @@ delivered in the `clientError` parameter passed into the callback function).
 
 Next, the EpoClient instance's [runCommand()]{@link EpoClient#runCommand} method
 is called to invoke the `system.find` remote command on the ePO server with a
-`searchText` parameter that is specified with the value of `broker` and an
-output format of [JSON]{@link module:OutputFormat.JSON}. On successful
-execution of the ePO remote command, the `responseText` parameter provided to the
-callback function contains the command results.
-
-The `responseText` parameter should be a binary
-[Buffer](https://nodejs.org/api/buffer.html). The
-[MessageUtils.decode()](https://opendxl.github.io/opendxl-bootstrap-javascript/jsdoc/module-MessageUtils.html#.decode)
-method is invoked to convert the Buffer into a String, which is then loaded
-into a JavaScript object via a call to the 
-[MessageUtils.jsonToObject()](https://opendxl.github.io/opendxl-bootstrap-javascript/jsdoc/module-MessageUtils.html#.jsonToObject)
-method.
+`searchText` parameter that is specified with the value of `broker`. On
+successful execution of the ePO remote command, the `responseObj` parameter
+provided to the callback function, a JavaScript `object`, contains the command
+results.
 
 Finally, the JavaScript response object is formatted as a pretty-printed string
 via a call to the

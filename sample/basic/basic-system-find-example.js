@@ -21,7 +21,6 @@ var dxl = common.require('@opendxl/dxl-client')
 var MessageUtils = common.require('@opendxl/dxl-bootstrap').MessageUtils
 var epo = common.require('@opendxl/dxl-epo-client')
 var EpoClient = epo.EpoClient
-var OutputFormat = epo.OutputFormat
 
 // Create DXL configuration from file
 var config = dxl.Config.createDxlConfigFromFile(common.CONFIG_FILE)
@@ -49,22 +48,18 @@ client.connect(function () {
       } else {
         // Run the system find command
         epoClient.runCommand('system.find',
-          function (searchError, responseText) {
+          function (searchError, responseObj) {
             // Destroy the client - frees up resources so that the application
             // stops running
             client.destroy()
             if (searchError) {
               console.log('Error finding system: ' + searchError.message)
             } else {
-              // Load find result into object
-              var responseObj = MessageUtils.jsonToObject(
-                MessageUtils.decode(responseText))
               // Display the results
               console.log(MessageUtils.objectToJson(responseObj, true))
             }
           },
-          {searchText: SEARCH_TEXT},
-          OutputFormat.JSON
+          {params: {searchText: SEARCH_TEXT}}
         )
       }
     }
