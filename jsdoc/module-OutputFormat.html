@@ -137,13 +137,14 @@ for ePO to use when responding to a remote command invocation.</p></div>
 
         
             
-<h4 class="name" id=".JSON"><span class="type-signature">(static) </span>JSON<span class="type-signature"></span></h4>
+<h4 class="name" id=".BINARY"><span class="type-signature">(static) </span>BINARY<span class="type-signature"></span></h4>
 
 
 
 
 <div class="description">
-    <p>JSON format</p>
+    <p>Return response payload as a <code>binary</code>
+<a href="https://nodejs.org/api/buffer.html">Buffer</a>.</p>
 </div>
 
 
@@ -181,7 +182,7 @@ for ePO to use when responding to a remote command invocation.</p></div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="output-format.js.html">output-format.js</a>, <a href="output-format.js.html#line13">line 13</a>
+        <a href="output-format.js.html">output-format.js</a>, <a href="output-format.js.html#line14">line 14</a>
     </li></ul></dd>
     
 
@@ -199,13 +200,13 @@ for ePO to use when responding to a remote command invocation.</p></div>
 
         
             
-<h4 class="name" id=".TERSE"><span class="type-signature">(static) </span>TERSE<span class="type-signature"></span></h4>
+<h4 class="name" id=".OBJECT"><span class="type-signature">(static) </span>OBJECT<span class="type-signature"></span></h4>
 
 
 
 
 <div class="description">
-    <p>Text-based format (terse)</p>
+    <p>Return response payload as a JavaScript <code>object</code>.</p>
 </div>
 
 
@@ -243,7 +244,7 @@ for ePO to use when responding to a remote command invocation.</p></div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="output-format.js.html">output-format.js</a>, <a href="output-format.js.html#line25">line 25</a>
+        <a href="output-format.js.html">output-format.js</a>, <a href="output-format.js.html#line22">line 22</a>
     </li></ul></dd>
     
 
@@ -261,13 +262,13 @@ for ePO to use when responding to a remote command invocation.</p></div>
 
         
             
-<h4 class="name" id=".VERBOSE"><span class="type-signature">(static) </span>VERBOSE<span class="type-signature"></span></h4>
+<h4 class="name" id=".STRING"><span class="type-signature">(static) </span>STRING<span class="type-signature"></span></h4>
 
 
 
 
 <div class="description">
-    <p>Text-based format (verbose)</p>
+    <p>Return response payload as a <code>string</code>.</p>
 </div>
 
 
@@ -305,69 +306,7 @@ for ePO to use when responding to a remote command invocation.</p></div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="output-format.js.html">output-format.js</a>, <a href="output-format.js.html#line21">line 21</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id=".XML"><span class="type-signature">(static) </span>XML<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    <p>XML format</p>
-</div>
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="output-format.js.html">output-format.js</a>, <a href="output-format.js.html#line17">line 17</a>
+        <a href="output-format.js.html">output-format.js</a>, <a href="output-format.js.html#line18">line 18</a>
     </li></ul></dd>
     
 
@@ -403,7 +342,7 @@ for ePO to use when responding to a remote command invocation.</p></div>
 
 
 <div class="description">
-    <p>Validates that the specified format is valid (json, xml, etc.).</p>
+    <p>Validates that the specified format is valid (binary, string, object).</p>
 </div>
 
 
@@ -496,7 +435,7 @@ for ePO to use when responding to a remote command invocation.</p></div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="output-format.js.html">output-format.js</a>, <a href="output-format.js.html#line31">line 31</a>
+        <a href="output-format.js.html">output-format.js</a>, <a href="output-format.js.html#line28">line 28</a>
     </li></ul></dd>
     
 

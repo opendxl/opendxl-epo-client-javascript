@@ -256,7 +256,7 @@ unique identifiers for ePO servers that are currently exposed to the fabric.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line75">line 75</a>
+        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line121">line 121</a>
     </li></ul></dd>
     
 
@@ -440,7 +440,7 @@ servers that are currently exposed to the DXL fabric.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line147">line 147</a>
+        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line428">line 428</a>
     </li></ul></dd>
     
 
@@ -635,7 +635,7 @@ servers that are currently exposed to the DXL fabric.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line292">line 292</a>
+        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line591">line 591</a>
     </li></ul></dd>
     
 
@@ -677,7 +677,7 @@ servers that are currently exposed to the DXL fabric.</p>
     
 
     
-    <h4 class="name" id="help"><span class="type-signature"></span>help<span class="signature">(callback, outputFormat)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="help"><span class="type-signature"></span>help<span class="signature">(callback)</span><span class="type-signature"></span></h4>
     
 
     
@@ -746,31 +746,6 @@ this client is communicating with.</p>
         </tr>
 
     
-
-        <tr>
-            
-                <td class="name"><code>outputFormat</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The output format for ePO to use when
-  returning the response. The list of <code>output formats</code> can be found in the
-  <a href="module-OutputFormat.html">OutputFormat</a> constants module.</p></td>
-        </tr>
-
-    
     </tbody>
 </table>
 
@@ -808,7 +783,7 @@ this client is communicating with.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line209">line 209</a>
+        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line470">line 470</a>
     </li></ul></dd>
     
 
@@ -829,35 +804,6 @@ this client is communicating with.</p>
 
 
 
-<h5>Throws:</h5>
-
-        
-
-<dl>
-    <dt>
-        <div class="param-desc">
-        <p>If the <code>outputFormat</code> is not valid.</p>
-        </div>
-    </dt>
-    <dd></dd>
-    <dt>
-        <dl>
-            <dt>
-                Type
-            </dt>
-            <dd>
-                
-<span class="param-type">TypeError</span>
-
-
-            </dd>
-        </dl>
-    </dt>
-    <dd></dd>
-</dl>
-
-
-    
 
 
 
@@ -1055,7 +1001,7 @@ receive ePO threat events.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line308">line 308</a>
+        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line607">line 607</a>
     </li></ul></dd>
     
 
@@ -1089,7 +1035,7 @@ receive ePO threat events.</p>
     
 
     
-    <h4 class="name" id="runCommand"><span class="type-signature"></span>runCommand<span class="signature">(commandName, callback, params, outputFormat)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="runCommand"><span class="type-signature"></span>runCommand<span class="signature">(commandName, callback, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
     
 
     
@@ -1122,6 +1068,8 @@ with.</p>
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -1147,6 +1095,14 @@ with.</p>
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -1170,6 +1126,14 @@ with.</p>
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -1177,9 +1141,69 @@ with.</p>
   the remote command. If an error occurs when performing the command,
   the first parameter supplied to the callback contains an <code>Error</code> object
   with failure details. On successful execution of the command, the remote
-  command output is provided as the second parameter to the callback.</p></td>
+  command output is provided as the second parameter to the callback. If
+  supported for the remote command, the raw response payload should be
+  formatted in JSON. The type of the response payload can be set via the
+  <code>outputFormat</code> option.</p></td>
         </tr>
 
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Additional options to supply for the remote
+  command.</p>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
     
 
         <tr>
@@ -1197,10 +1221,27 @@ with.</p>
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
 
+                
+
+                
+                </td>
             
 
-            <td class="description last"><p>An object containing the parameters for the command.</p></td>
+            
+                <td class="default">
+                
+                    {}
+                
+                </td>
+            
+
+            <td class="description last"><p>An object containing the parameters for
+  the command.</p></td>
         </tr>
 
     
@@ -1220,12 +1261,35 @@ with.</p>
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
 
+                
+
+                
+                </td>
             
 
-            <td class="description last"><p>The output format for ePO to use when
-  returning the response. The list of <code>output formats</code> can be found in the
-  <a href="module-OutputFormat.html">OutputFormat</a> constants module.</p></td>
+            
+                <td class="default">
+                
+                    object
+                
+                </td>
+            
+
+            <td class="description last"><p>The output format for ePO
+  to use when returning the response. The list of <code>output formats</code> can be
+  found in the <a href="module-OutputFormat.html">OutputFormat</a> constants module.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -1266,7 +1330,7 @@ with.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line253">line 253</a>
+        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line523">line 523</a>
     </li></ul></dd>
     
 
@@ -1331,11 +1395,10 @@ with.</p>
     if (searchError) {
       console.log('Error finding system: ' + searchError.message)
     } else {
-      console.log(responseText)
+      console.log(JSON.stringify(responseObj, null, 2))
     }
   },
-  {searchText: 'mySystem'},
-  OutputFormat.JSON
+  {params: {searchText: 'mySystem'}}
 )</code></pre>
 
         <p class="code-caption">Example Response Text</p>

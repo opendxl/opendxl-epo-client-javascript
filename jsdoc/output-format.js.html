@@ -36,31 +36,27 @@
 
 module.exports = {
   /**
-   * JSON format
+   * Return response payload as a `binary`
+   * [Buffer]{@link https://nodejs.org/api/buffer.html}.
    */
-  JSON: 'json',
+  BINARY: 'binary',
   /**
-   * XML format
+   * Return response payload as a `string`.
    */
-  XML: 'xml',
+  STRING: 'string',
   /**
-   * Text-based format (verbose)
+   * Return response payload as a JavaScript `object`.
    */
-  VERBOSE: 'verbose',
+  OBJECT: 'object',
   /**
-   * Text-based format (terse)
-   */
-  TERSE: 'terse',
-  /**
-   * Validates that the specified format is valid (json, xml, etc.).
+   * Validates that the specified format is valid (binary, string, object).
    * @param {String} outputFormat - The output format
    * @throws {TypeError} If the format is not valid.
    */
   validate: function (outputFormat) {
-    if ([module.exports.JSON,
-      module.exports.XML,
-      module.exports.VERBOSE,
-      module.exports.TERSE].indexOf(outputFormat) &lt; 0) {
+    if ([module.exports.BINARY,
+      module.exports.STRING,
+      module.exports.OBJECT].indexOf(outputFormat) &lt; 0) {
       throw TypeError('Invalid output format: ' + outputFormat)
     }
   }
