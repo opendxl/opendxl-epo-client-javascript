@@ -33,10 +33,15 @@ via the ePO DXL service. The &quot;core help&quot; command lists the remote comm
 are exposed by a particular ePO server.</p>
 <h3>Prerequisites</h3><ul>
 <li>The samples configuration step has been completed (see <a href="tutorial-samples.html">Samples</a>).</li>
-<li>The ePO DXL service is running and available on the fabric (see
-<a href="https://github.com/opendxl/opendxl-epo-service-python">ePO DXL Python Service</a>).</li>
-<li>The client is authorized to invoke the ePO DXL Service (see 
-<a href="https://opendxl.github.io/opendxl-epo-service-python/pydoc/authorization.html#client-authorization">ePO DXL Service Client Authorization</a>).</li>
+<li>An ePO DXL service is running and available on the fabric. If version 5.0
+or later of the DXL ePO extensions are installed on your ePO server, an
+ePO DXL service should already be running on the fabric. If you are using an
+earlier version of the DXL ePO extensions, you can use the
+<a href="https://github.com/opendxl/opendxl-epo-service-python">ePO DXL Python Service</a>.</li>
+<li>The client is authorized to invoke the ePO DXL Service, and the user that is
+connecting to the ePO server (within the ePO DXL service) has permission to
+execute the &quot;core help&quot; remote command (see
+<a href="https://opendxl.github.io/opendxl-epo-client-python/pydoc/authorization.html">ePO DXL Python Client Authorization</a>).</li>
 </ul>
 <h3>Setup</h3><p>Modify the example to include the <code>unique identifier</code> associated with the ePO
 to invoke the remote command on.</p>
@@ -99,7 +104,7 @@ client.connect(function () {
             console.log('Error getting help: ' + helpError.message)
           } else {
             // Display the help
-            console.log(MessageUtils.decode(helpText))
+            console.log(helpText)
           }
         })
       }
@@ -120,11 +125,6 @@ delivered in the <code>clientError</code> parameter passed into the callback fun
 to invoke the <code>help</code> remote command on the ePO server. On successful execution
 of the ePO remote command, the <code>helpText</code> parameter provided to the callback
 function contains the command results.</p>
-<p>The <code>helpText</code> parameter should be a binary
-<a href="https://nodejs.org/api/buffer.html">Buffer</a>. The
-<a href="https://opendxl.github.io/opendxl-bootstrap-javascript/jsdoc/module-MessageUtils.html#.decode">MessageUtils.decode()</a>
-method is invoked to convert the Buffer into a String, which is then displayed
-to the console.</p>
 </article>
 
 </section>
