@@ -16,7 +16,6 @@
 
 var common = require('../common')
 var dxl = common.require('@opendxl/dxl-client')
-var MessageUtils = common.require('@opendxl/dxl-bootstrap').MessageUtils
 var EpoClient = common.require('@opendxl/dxl-epo-client').EpoClient
 
 // Create DXL configuration from file
@@ -49,7 +48,7 @@ client.connect(function () {
             console.log('Error getting help: ' + helpError.message)
           } else {
             // Display the help
-            console.log(MessageUtils.decode(helpText))
+            console.log(helpText)
           }
         })
       }

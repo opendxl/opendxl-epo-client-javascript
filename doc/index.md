@@ -13,8 +13,11 @@ and message formats.
 This client requires an ePO DXL service to be running and available on the DXL
 fabric.
 
-A Python-based implementation of an ePO DXL service is available here:
-* [McAfee ePolicy Orchestrator (ePO) DXL Python Service](https://github.com/opendxl/opendxl-epo-service-python)
+* If version 5.0 or later of the DXL ePO extensions are installed on your ePO
+  server, an ePO DXL service should already be running on the fabric.
+
+* If you are using an earlier version of the DXL ePO extensions, you can use the
+  [McAfee ePolicy Orchestrator (ePO) DXL Python Service](https://github.com/opendxl/opendxl-epo-service-python).
 
 ## Installation
 

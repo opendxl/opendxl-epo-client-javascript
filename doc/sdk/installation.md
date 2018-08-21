@@ -8,10 +8,27 @@
 
 * McAfee ePolicy Orchestrator (ePO) service is running and available on DXL
   fabric
-  * <https://github.com/opendxl/opendxl-epo-service-python> (Python-based service implementation)
+
+  * If version 5.0 or later of the DXL ePO extensions are installed on your ePO
+    server, an ePO DXL service should already be running on the fabric.
+
+  * If you are using an earlier version of the DXL ePO extensions, you can use the
+    [McAfee ePolicy Orchestrator (ePO) DXL Python Service](https://github.com/opendxl/opendxl-epo-service-python).
 
 * OpenDXL JavaScript Client (Node.js) has permission to invoke ePO remote commands
-  * <https://opendxl.github.io/opendxl-epo-service-python/pydoc/authorization.html#client-authorization>
+
+  * If version 5.0 or later of DXL ePO extensions are installed on your ePO
+    server, follow the steps on the
+    [ePO DXL Python Client Authorization](https://opendxl.github.io/opendxl-epo-client-python/pydoc/authorization.html)
+    page to ensure that the OpenDXL JavaScript client has appropriate
+    authorization to perform ePO remote commands.
+
+  * If you are using the standalone
+    [ePO DXL Python Service](https://github.com/opendxl/opendxl-epo-service-python)
+    to proxy remote commands to the ePO server, follow the steps on the
+    [ePO DXL Python Service Authorization](https://opendxl.github.io/opendxl-epo-service-python/pydoc/authorization.html#client-authorization)
+    page to ensure that the OpenDXL Python client has appropriate authorization
+    to perform ePO remote commands.
 
 * Node.js 4.0 or higher installed.
 

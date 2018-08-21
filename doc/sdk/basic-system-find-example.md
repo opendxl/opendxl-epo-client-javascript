@@ -5,12 +5,15 @@ format.
 ### Prerequisites
 
 * The samples configuration step has been completed (see {@tutorial samples}).
-* The ePO DXL service is running and available on the fabric (see
-  [ePO DXL Python Service](https://github.com/opendxl/opendxl-epo-service-python)).
-* The client is authorized to invoke the ePO DXL Service (see 
-  [ePO DXL Service Client Authorization](https://opendxl.github.io/opendxl-epo-service-python/pydoc/authorization.html#client-authorization)).
-* The user that is connecting to the ePO server (within the ePO DXL service)
-  has permission to execute the "system find" remote command.
+* An ePO DXL service is running and available on the fabric. If version 5.0
+  or later of the DXL ePO extensions are installed on your ePO server, an
+  ePO DXL service should already be running on the fabric. If you are using an
+  earlier version of the DXL ePO extensions, you can use the
+  [ePO DXL Python Service](https://github.com/opendxl/opendxl-epo-service-python).
+* The client is authorized to invoke the ePO DXL Service, and the user that is
+  connecting to the ePO server (within the ePO DXL service) has permission to
+  execute the "system find" remote command (see
+  [ePO DXL Python Client Authorization](https://opendxl.github.io/opendxl-epo-client-python/pydoc/authorization.html)).
 
 ### Setup
 

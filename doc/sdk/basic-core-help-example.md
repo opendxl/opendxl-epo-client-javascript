@@ -5,10 +5,15 @@ are exposed by a particular ePO server.
 ### Prerequisites
 
 * The samples configuration step has been completed (see {@tutorial samples}).
-* The ePO DXL service is running and available on the fabric (see
-  [ePO DXL Python Service](https://github.com/opendxl/opendxl-epo-service-python)).
-* The client is authorized to invoke the ePO DXL Service (see 
-  [ePO DXL Service Client Authorization](https://opendxl.github.io/opendxl-epo-service-python/pydoc/authorization.html#client-authorization)).
+* An ePO DXL service is running and available on the fabric. If version 5.0
+  or later of the DXL ePO extensions are installed on your ePO server, an
+  ePO DXL service should already be running on the fabric. If you are using an
+  earlier version of the DXL ePO extensions, you can use the
+  [ePO DXL Python Service](https://github.com/opendxl/opendxl-epo-service-python).
+* The client is authorized to invoke the ePO DXL Service, and the user that is
+  connecting to the ePO server (within the ePO DXL service) has permission to
+  execute the "core help" remote command (see
+  [ePO DXL Python Client Authorization](https://opendxl.github.io/opendxl-epo-client-python/pydoc/authorization.html)).
 
 ### Setup
 
@@ -97,7 +102,7 @@ client.connect(function () {
             console.log('Error getting help: ' + helpError.message)
           } else {
             // Display the help
-            console.log(MessageUtils.decode(helpText))
+            console.log(helpText)
           }
         })
       }
@@ -122,9 +127,3 @@ Next, the EpoClient instance's [help()]{@link EpoClient#help} method is called
 to invoke the `help` remote command on the ePO server. On successful execution
 of the ePO remote command, the `helpText` parameter provided to the callback
 function contains the command results.
-
-The `helpText` parameter should be a binary
-[Buffer](https://nodejs.org/api/buffer.html). The
-[MessageUtils.decode()](https://opendxl.github.io/opendxl-bootstrap-javascript/jsdoc/module-MessageUtils.html#.decode)
-method is invoked to convert the Buffer into a String, which is then displayed
-to the console.
