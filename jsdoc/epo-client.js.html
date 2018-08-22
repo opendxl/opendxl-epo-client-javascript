@@ -65,38 +65,6 @@ var EPO_HELP_COMMAND = 'core.help'
 // JSON output format for ePO remote command
 var OUTPUT_FORMAT_JSON = 'json'
 
-// Error code that a DXL broker returns in an ErrorResponse to a request
-// which targets an unregistered request topic.
-var DXL_SERVICE_UNAVAILABLE_ERROR_CODE = 0x80000001
-
-/**
- * Get the error code from a `MessageError`. Adjust the value if it
- * is negative for use in translating standard DXL broker error codes.
- * @param {MessageError} error - The DXL `MessageError`.
- * @returns {Number} - The error code (with any necessary adjustments).
- * @private
- */
-function normalizedErrorCode (error) {
-  var errorCode = 0
-  if ('code' in error) {
-    errorCode = error.code &lt; 0 ? 0xFFFFFFFF + error.code + 1 : error.code
-  }
-  return errorCode
-}
-
-/**
- * Determine an `Error` contains a DXL `ErrorResponse` with a
- * "service unavailable" error code.
- * @param {Error} error - The Error
- * @returns {Boolean} - `true` if the error contains a "service unavailable"
- *   `ErrorResponse`, else `false`.
- * @private
- */
-function containsServiceNotAvailableErrorResponse (error) {
-  return (error &amp;&amp; error.name === 'MessageError' &amp;&amp;
-    (normalizedErrorCode(error) === DXL_SERVICE_UNAVAILABLE_ERROR_CODE))
-}
-
 /**
  * @classdesc Responsible for all communication with the
  * Data Exchange Layer (DXL) fabric.
@@ -106,8 +74,8 @@ function containsServiceNotAvailableErrorResponse (error) {
 
 /**
  * @classdesc Event messages are sent using the
- * [sendEvent]{@link https://opendxl.github.io/opendxl-client-javascript/jsdoc/Client.html#sendEvent} method of a client
- * instance.
+ * [sendEvent]{@link https://opendxl.github.io/opendxl-client-javascript/jsdoc/Client.html#sendEvent}
+ * method of a client instance.
  * @external Event
  * @see {@link https://opendxl.github.io/opendxl-client-javascript/jsdoc/Event.html}
  */
@@ -134,16 +102,28 @@ function containsServiceNotAvailableErrorResponse (error) {
  * optional (the client will automatically determine the ePO's unique
  * identifier).
  *
- * The {@link EpoClient.lookupEpoUniqueIdentifiers} method can be used to determine the
- * unique identifiers for ePO servers that are currently exposed to the fabric.
+ * The {@link EpoClient.lookupEpoUniqueIdentifiers} method can be used to
+ * determine the unique identifiers for ePO servers that are currently exposed
+ * to the fabric.
  *
  * @param {external:DxlClient} dxlClient - The DXL client to use for
  *   communication with the ePO DXL service
- * @param {String} [epoUniqueId=null] - The unique identifier used to specify
- *   the ePO server that this client will communicate with.
- * @param {Function} [callback=null] - Callback function which should be invoked
+ * @param {String} [epoUniqueId] - The unique identifier used to specify the ePO
+ *   server that this client will communicate with.
+ * @param {Function} [callback] - Callback function which should be invoked
  *   after the ePO unique identifier has been determined and the client is
  *   ready to use.
+ *
+ *   If validation of the ePO unique identifier fails, the first parameter
+ *   supplied to the callback contains an `Error` object with failure details.
+ *   An `Error` object could be delivered for any of the following conditions:
+ *
+ *   * No value is provided for the `epoUniqueId` parameter and zero or more
+ *     than 1 ePO service is found on the DXL fabric.
+ *   * A value is provided for the `epoUniqueId` parameter but no ePO service
+ *     matching the id is found on the DXL fabric.
+ *   * An error occurs when trying to make DXL requests to the broker to
+ *     query for available ePO services.
  * @constructor
  */
 function EpoClient (dxlClient, epoUniqueId, callback) {
@@ -186,8 +166,8 @@ function EpoClient (dxlClient, epoUniqueId, callback) {
    * @private
    */
   this._getEpoId = function (callback) {
-    EpoClient.lookupEpoUniqueIdentifiers(dxlClient,
-      function (error, epoUniqueIds) {
+    lookupEpoUniqueIdentifiers(dxlClient,
+      function (error, epoUniqueIds, useEpoCommandsService) {
         if (epoUniqueIds) {
           switch (epoUniqueIds.length) {
             case 0:
@@ -205,11 +185,50 @@ function EpoClient (dxlClient, epoUniqueId, callback) {
               )
           }
         }
+        that._useEpoCommandsService = useEpoCommandsService
         that._epoIdSearchStatus = error ? error.message : 'ePO id found'
         if (callback) {
           callback(error)
         }
       })
+  }
+
+  /**
+   * Determines if the supplied `epoUniqueId` maps to an ePO DXL "commands" or
+   * a "remote" service.
+   * @param {String} [epoUniqueId] - The unique identifier used to specify the
+   *   ePO server that this client will communicate with.
+   * @param {Function} [callback] - Callback function which should be invoked
+   *   with the result of the attempt to determine the service type for the
+   *   id. If the attempt to determine the service type fails, the first
+   *   parameter supplied to the callback contains an `Error` object with
+   *   failure details. If the service type can successfully be determined, the
+   *   second parameter supplied to the callback is `true` if the unique
+   *   identifier matches a "commands" service, else `false` if the unique
+   *   identifier matches a "remote" service.
+   * @private
+   */
+  this._isEpoUniqueIdForCommandsService = function (epoUniqueId, callback) {
+    lookupEpoCommandsServiceUniqueIds(dxlClient,
+      function (error, epoIds) {
+        if (epoIds) {
+          if (epoIds.indexOf(epoUniqueId) &lt; 0) {
+            lookupEpoRemoteServiceUniqueIds(dxlClient,
+              function (error, epoIds) {
+                if (!error &amp;&amp; epoIds.indexOf(epoUniqueId) &lt; 0) {
+                  error = new Error('No ePO DXL services are registered with ' +
+                    'the DXL fabric for id: ' + epoUniqueId)
+                }
+                callback(error, false)
+              })
+          } else {
+            callback(error, true)
+          }
+        } else {
+          callback(error, false)
+        }
+      }
+    )
   }
 
   /**
@@ -313,16 +332,27 @@ function EpoClient (dxlClient, epoUniqueId, callback) {
     )
   }
 
-  if (!epoUniqueId) {
-    if (dxlClient.connected) {
-      this._getEpoId(callback)
-    } else {
-      dxlClient.once('connect', function () { that._getEpoId(callback) })
+  var epoIdCallback
+  if (epoUniqueId) {
+    epoIdCallback = function () {
+      that._isEpoUniqueIdForCommandsService(epoUniqueId,
+        function (error, useEpoCommandsService) {
+          that._useEpoCommandsService = useEpoCommandsService
+          callback(error)
+        })
     }
   } else {
-    if (callback) {
-      setImmediate(callback)
-    }
+    epoIdCallback = function () { that._getEpoId(callback) }
+  }
+
+  // Wait to invoke the callback function used to validate the ePO unique id
+  // until a connection has been made to the DXL fabric. The validation logic
+  // involves making requests to the DXL fabric, so the client must be
+  // connected before the validation is attempted.
+  if (dxlClient.connected) {
+    epoIdCallback()
+  } else {
+    dxlClient.once('connect', epoIdCallback)
   }
 }
 
@@ -443,7 +473,35 @@ function lookupEpoRemoteServiceUniqueIds (dxlClient, callback) {
 }
 
 /**
- * Returns an array of strings containing the unique identifiers for the ePO
+ * Retrieves an array of strings containing the unique identifiers for the ePO
+ * servers that are currently exposed to the DXL fabric.
+ * @param {external:DxlClient} dxlClient - The DXL client with which to perform
+ *   the request
+ * @param {Function} callback - Callback function to invoke with the unique
+ *   identifiers which are found. If an error occurs when performing the lookup,
+ *   the first parameter supplied to the callback contains an `Error` object
+ *   with failure details. On successful lookup, the array of unique identifier
+ *   strings is provided as the second parameter to the callback and the
+ *   third parameter to the callback is a boolean representing whether the
+ *   ids are for "commands" services (`true`) or "remote" services (`false`).
+ */
+function lookupEpoUniqueIdentifiers (dxlClient, callback) {
+  lookupEpoCommandsServiceUniqueIds(dxlClient,
+    function (error, epoIds) {
+      if (error || !epoIds.length) {
+        lookupEpoRemoteServiceUniqueIds(dxlClient,
+          function (error, epoIds) {
+            callback(error, epoIds, false)
+          })
+      } else {
+        callback(error, epoIds, true)
+      }
+    }
+  )
+}
+
+/**
+ * Retrieves an array of strings containing the unique identifiers for the ePO
  * servers that are currently exposed to the DXL fabric.
  * @param {external:DxlClient} dxlClient - The DXL client with which to perform
  *   the request
@@ -454,16 +512,9 @@ function lookupEpoRemoteServiceUniqueIds (dxlClient, callback) {
  *   strings is provided as the second parameter to the callback.
  */
 EpoClient.lookupEpoUniqueIdentifiers = function (dxlClient, callback) {
-  lookupEpoCommandsServiceUniqueIds(dxlClient,
+  lookupEpoUniqueIdentifiers(dxlClient,
     function (error, epoIds) {
-      if (error || !epoIds.length) {
-        lookupEpoRemoteServiceUniqueIds(dxlClient,
-          function (error, epoIds) {
-            callback(error, epoIds)
-          })
-      } else {
-        callback(error, epoIds)
-      }
+      callback(error, epoIds)
     })
 }
 
@@ -563,38 +614,10 @@ EpoClient.prototype.runCommand = function (commandName, callback, options) {
   if (client._epoUniqueId) {
     if (client._useEpoCommandsService) {
       client._invokeEpoCommandsService(commandName, outputFormat, params,
-        function (error, response) {
-          if (containsServiceNotAvailableErrorResponse(error)) {
-            client._invokeEpoRemoteService(commandName, outputFormat, params,
-              function (error, response) {
-                if (response) {
-                  client._useEpoCommandsService = false
-                }
-                callback(error, response)
-              }
-            )
-          } else {
-            callback(error, response)
-          }
-        }
-      )
+        callback)
     } else {
       client._invokeEpoRemoteService(commandName, outputFormat, params,
-        function (error, response) {
-          if (containsServiceNotAvailableErrorResponse(error)) {
-            client._invokeEpoCommandsService(commandName, outputFormat, params,
-              function (error, response) {
-                if (response) {
-                  client._useEpoCommandsService = true
-                }
-                callback(error, response)
-              }
-            )
-          } else {
-            callback(error, response)
-          }
-        }
-      )
+        callback)
     }
   } else {
     callback(new Error(client._epoIdSearchStatus))
@@ -649,7 +672,7 @@ module.exports = EpoClient
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-OutputFormat.html">OutputFormat</a></li></ul><h3>Externals</h3><ul><li><a href="external-DxlClient.html">DxlClient</a></li><li><a href="external-Event.html">Event</a></li></ul><h3>Classes</h3><ul><li><a href="EpoClient.html">EpoClient</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-installation.html">Library Installation</a></li><li><a href="tutorial-samples.html">Samples</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-OutputFormat.html">OutputFormat</a></li></ul><h3>Externals</h3><ul><li><a href="external-DxlClient.html">DxlClient</a></li><li><a href="external-Event.html">Event</a></li></ul><h3>Classes</h3><ul><li><a href="EpoClient.html">EpoClient</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-installation.html">Library Installation</a></li><li><a href="tutorial-samples.html">Samples</a></li></ul><h3>Global</h3><ul><li><a href="global.html#lookupEpoUniqueIdentifiers">lookupEpoUniqueIdentifiers</a></li></ul>
 </nav>
 
 <br class="clear">

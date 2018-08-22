@@ -45,8 +45,9 @@ started.</p>
 <p>If only one ePO server is connected to the DXL fabric this parameter is
 optional (the client will automatically determine the ePO's unique
 identifier).</p>
-<p>The <a href="EpoClient.html#.lookupEpoUniqueIdentifiers">EpoClient.lookupEpoUniqueIdentifiers</a> method can be used to determine the
-unique identifiers for ePO servers that are currently exposed to the fabric.</p></div>
+<p>The <a href="EpoClient.html#.lookupEpoUniqueIdentifiers">EpoClient.lookupEpoUniqueIdentifiers</a> method can be used to
+determine the unique identifiers for ePO servers that are currently exposed
+to the fabric.</p></div>
         
     
 </header>
@@ -93,8 +94,6 @@ unique identifiers for ePO servers that are currently exposed to the fabric.</p>
         
 
         
-        <th>Default</th>
-        
 
         <th class="last">Description</th>
     </tr>
@@ -127,10 +126,6 @@ unique identifiers for ePO servers that are currently exposed to the fabric.</p>
                 </td>
             
 
-            
-                <td class="default">
-                
-                </td>
             
 
             <td class="description last"><p>The DXL client to use for
@@ -166,15 +161,9 @@ unique identifiers for ePO servers that are currently exposed to the fabric.</p>
             
 
             
-                <td class="default">
-                
-                    null
-                
-                </td>
-            
 
-            <td class="description last"><p>The unique identifier used to specify
-  the ePO server that this client will communicate with.</p></td>
+            <td class="description last"><p>The unique identifier used to specify the ePO
+  server that this client will communicate with.</p></td>
         </tr>
 
     
@@ -206,16 +195,21 @@ unique identifiers for ePO servers that are currently exposed to the fabric.</p>
             
 
             
-                <td class="default">
-                
-                    null
-                
-                </td>
-            
 
             <td class="description last"><p>Callback function which should be invoked
   after the ePO unique identifier has been determined and the client is
-  ready to use.</p></td>
+  ready to use.</p>
+<p>  If validation of the ePO unique identifier fails, the first parameter
+  supplied to the callback contains an <code>Error</code> object with failure details.
+  An <code>Error</code> object could be delivered for any of the following conditions:</p>
+<ul>
+<li>No value is provided for the <code>epoUniqueId</code> parameter and zero or more
+than 1 ePO service is found on the DXL fabric.</li>
+<li>A value is provided for the <code>epoUniqueId</code> parameter but no ePO service
+matching the id is found on the DXL fabric.</li>
+<li>An error occurs when trying to make DXL requests to the broker to
+query for available ePO services.</li>
+</ul></td>
         </tr>
 
     
@@ -256,7 +250,7 @@ unique identifiers for ePO servers that are currently exposed to the fabric.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line121">line 121</a>
+        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line101">line 101</a>
     </li></ul></dd>
     
 
@@ -318,7 +312,7 @@ unique identifiers for ePO servers that are currently exposed to the fabric.</p>
 
 
 <div class="description">
-    <p>Returns an array of strings containing the unique identifiers for the ePO
+    <p>Retrieves an array of strings containing the unique identifiers for the ePO
 servers that are currently exposed to the DXL fabric.</p>
 </div>
 
@@ -440,7 +434,7 @@ servers that are currently exposed to the DXL fabric.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line428">line 428</a>
+        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line486">line 486</a>
     </li></ul></dd>
     
 
@@ -635,7 +629,7 @@ servers that are currently exposed to the DXL fabric.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line591">line 591</a>
+        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line614">line 614</a>
     </li></ul></dd>
     
 
@@ -783,7 +777,7 @@ this client is communicating with.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line470">line 470</a>
+        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line521">line 521</a>
     </li></ul></dd>
     
 
@@ -1001,7 +995,7 @@ receive ePO threat events.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line607">line 607</a>
+        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line630">line 630</a>
     </li></ul></dd>
     
 
@@ -1330,7 +1324,7 @@ with.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line523">line 523</a>
+        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line574">line 574</a>
     </li></ul></dd>
     
 
@@ -1433,7 +1427,7 @@ with.</p>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-OutputFormat.html">OutputFormat</a></li></ul><h3>Externals</h3><ul><li><a href="external-DxlClient.html">DxlClient</a></li><li><a href="external-Event.html">Event</a></li></ul><h3>Classes</h3><ul><li><a href="EpoClient.html">EpoClient</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-installation.html">Library Installation</a></li><li><a href="tutorial-samples.html">Samples</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-OutputFormat.html">OutputFormat</a></li></ul><h3>Externals</h3><ul><li><a href="external-DxlClient.html">DxlClient</a></li><li><a href="external-Event.html">Event</a></li></ul><h3>Classes</h3><ul><li><a href="EpoClient.html">EpoClient</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-installation.html">Library Installation</a></li><li><a href="tutorial-samples.html">Samples</a></li></ul><h3>Global</h3><ul><li><a href="global.html#lookupEpoUniqueIdentifiers">lookupEpoUniqueIdentifiers</a></li></ul>
 </nav>
 
 <br class="clear">
