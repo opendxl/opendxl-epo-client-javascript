@@ -27,7 +27,7 @@
     [ePO DXL Python Service](https://github.com/opendxl/opendxl-epo-service-python)
     to proxy remote commands to the ePO server, follow the steps on the
     [ePO DXL Python Service Authorization](https://opendxl.github.io/opendxl-epo-service-python/pydoc/authorization.html#client-authorization)
-    page to ensure that the OpenDXL Python client has appropriate authorization
+    page to ensure that the OpenDXL JavaScript client has appropriate authorization
     to perform ePO remote commands.
 
 * Node.js 4.0 or higher installed.
