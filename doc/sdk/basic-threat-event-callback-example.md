@@ -5,6 +5,8 @@ received is displayed in JSON format.
 ### Prerequisites
 
 * The samples configuration step has been completed (see {@tutorial samples}).
+* The client is authorized to receive "ePO Threat Event Automatic Response Events"
+  (see [Client Authorization](https://opendxl.github.io/opendxl-epo-service-python/pydoc/authorization.html#client-authorization)).
 
 ### Running
 
