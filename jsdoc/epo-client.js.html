@@ -434,7 +434,6 @@ function lookupEpoUniqueIdsForServiceType (dxlClient, serviceType,
                   epoIds.push(epoId)
                 }
               })
-            epoIds.sort()
           }
         } catch (err) {
           error = err
@@ -516,20 +515,31 @@ function lookupEpoRemoteServiceUniqueIds (dxlClient, callback) {
  *   the first parameter supplied to the callback contains an `Error` object
  *   with failure details. On successful lookup, the array of unique identifier
  *   strings is provided as the second parameter to the callback and the
- *   third parameter to the callback is a boolean representing whether the
- *   ids are for "commands" services (`true`) or "remote" services (`false`).
+ *   third parameter to the callback is a boolean representing whether a
+ *   "commands" (`true`) or a "remote" (`false`) should be used. If at least
+ *   one "remote" service is available, a "remote" service should be used.
  * @private
  */
 function lookupEpoUniqueIdentifiers (dxlClient, callback) {
   lookupEpoRemoteServiceUniqueIds(dxlClient,
-    function (error, epoIds) {
-      if (error || !epoIds.length) {
+    function (error, epoRemoteServiceIds) {
+      if (epoRemoteServiceIds) {
         lookupEpoCommandsServiceUniqueIds(dxlClient,
-          function (error, epoIds) {
-            callback(error, epoIds, true)
+          function (error, epoServiceIds) {
+            if (epoServiceIds) {
+              epoRemoteServiceIds.forEach(function (serviceId) {
+                if (epoServiceIds.indexOf(serviceId) &lt; 0) {
+                  epoServiceIds.push(serviceId)
+                }
+              })
+              epoServiceIds.sort()
+              callback(error, epoServiceIds, !epoRemoteServiceIds.length)
+            } else {
+              callback(error)
+            }
           })
       } else {
-        callback(error, epoIds, false)
+        callback(error)
       }
     }
   )
