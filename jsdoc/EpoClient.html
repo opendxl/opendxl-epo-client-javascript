@@ -28,7 +28,7 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>EpoClient<span class="signature">(dxlClient, epoUniqueId<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>EpoClient<span class="signature">(dxlClient, epoUniqueId<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h2>
         
             <div class="class-description"><p>This client provides a high level wrapper for invoking ePO remote
 commands via the Data Exchange Layer (DXL) fabric.</p>
@@ -62,7 +62,7 @@ to the fabric.</p></div>
     
 
     
-    <h4 class="name" id="EpoClient"><span class="type-signature"></span>new EpoClient<span class="signature">(dxlClient, epoUniqueId<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="EpoClient"><span class="type-signature"></span>new EpoClient<span class="signature">(dxlClient, epoUniqueId<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
     
 
     
@@ -167,52 +167,6 @@ to the fabric.</p></div>
         </tr>
 
     
-
-        <tr>
-            
-                <td class="name"><code>callback</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>Callback function which should be invoked
-  after the ePO unique identifier has been determined and the client is
-  ready to use.</p>
-<p>  If validation of the ePO unique identifier fails, the first parameter
-  supplied to the callback contains an <code>Error</code> object with failure details.
-  An <code>Error</code> object could be delivered for any of the following conditions:</p>
-<ul>
-<li>No value is provided for the <code>epoUniqueId</code> parameter and zero or more
-than 1 ePO service is found on the DXL fabric.</li>
-<li>A value is provided for the <code>epoUniqueId</code> parameter but no ePO service
-matching the id is found on the DXL fabric.</li>
-<li>An error occurs when trying to make DXL requests to the broker to
-query for available ePO services.</li>
-</ul></td>
-        </tr>
-
-    
     </tbody>
 </table>
 
@@ -250,7 +204,7 @@ query for available ePO services.</li>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line101">line 101</a>
+        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line87">line 87</a>
     </li></ul></dd>
     
 
@@ -434,7 +388,7 @@ servers that are currently exposed to the DXL fabric.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line487">line 487</a>
+        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line521">line 521</a>
     </li></ul></dd>
     
 
@@ -629,7 +583,7 @@ servers that are currently exposed to the DXL fabric.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line615">line 615</a>
+        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line686">line 686</a>
     </li></ul></dd>
     
 
@@ -671,7 +625,7 @@ servers that are currently exposed to the DXL fabric.</p>
     
 
     
-    <h4 class="name" id="help"><span class="type-signature"></span>help<span class="signature">(callback)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="help"><span class="type-signature"></span>help<span class="signature">(responseCallback)</span><span class="type-signature"></span></h4>
     
 
     
@@ -716,7 +670,7 @@ this client is communicating with.</p>
 
         <tr>
             
-                <td class="name"><code>callback</code></td>
+                <td class="name"><code>responseCallback</code></td>
             
 
             <td class="type">
@@ -732,11 +686,24 @@ this client is communicating with.</p>
 
             
 
-            <td class="description last"><p>Callback function to invoke with the remote
-  commands which are found. If an error occurs when performing the command,
-  the first parameter supplied to the callback contains an <code>Error</code> object
-  with failure details. On successful execution of the command, the remote
-  command output is provided as the second parameter to the callback.</p></td>
+            <td class="description last"><p>Callback function to invoke with the
+  remote commands which are found. If an error occurs when performing the
+  command, the first parameter supplied to the callback contains an <code>Error</code>
+  object with failure details. On successful execution of the command, the
+  remote command output is provided as the second parameter to the callback.</p>
+<p>  If determination of the ePO unique identifier fails, the first parameter
+  supplied to the callback contains an <code>Error</code> object with failure details.
+  An <code>Error</code> object could be delivered for any of the following conditions:</p>
+<ul>
+<li>No value is provided for the <code>epoUniqueId</code> parameter during client
+construction and zero or more than 1 ePO service is found on the DXL
+fabric.</li>
+<li>A value is provided for the <code>epoUniqueId</code> parameter during client
+construction but no ePO service matching the id is found on the DXL
+fabric.</li>
+<li>An error occurs when trying to make DXL requests to the broker to
+query for available ePO services.</li>
+</ul></td>
         </tr>
 
     
@@ -777,7 +744,7 @@ this client is communicating with.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line522">line 522</a>
+        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line569">line 569</a>
     </li></ul></dd>
     
 
@@ -995,7 +962,7 @@ receive ePO threat events.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line631">line 631</a>
+        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line702">line 702</a>
     </li></ul></dd>
     
 
@@ -1029,7 +996,7 @@ receive ePO threat events.</p>
     
 
     
-    <h4 class="name" id="runCommand"><span class="type-signature"></span>runCommand<span class="signature">(commandName, callback, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="runCommand"><span class="type-signature"></span>runCommand<span class="signature">(commandName, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
     
 
     
@@ -1107,44 +1074,6 @@ with.</p>
 
         <tr>
             
-                <td class="name"><code>callback</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>Callback function to invoke with the results of
-  the remote command. If an error occurs when performing the command,
-  the first parameter supplied to the callback contains an <code>Error</code> object
-  with failure details. On successful execution of the command, the remote
-  command output is provided as the second parameter to the callback. If
-  supported for the remote command, the raw response payload should be
-  formatted in JSON. The type of the response payload can be set via the
-  <code>outputFormat</code> option.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
                 <td class="name"><code>options</code></td>
             
 
@@ -1202,6 +1131,63 @@ with.</p>
 
         <tr>
             
+                <td class="name"><code>responseCallback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Callback function to invoke
+  with the results of the remote command.</p>
+<p>  If an error occurs when performing the command, the first parameter
+  supplied to the callback contains an <code>Error</code> object with failure details.
+  On successful execution of the command, the remote command output is
+  provided as the second parameter to the callback. If supported for the
+  remote command, the raw response payload should be formatted in JSON. The
+  type of the response payload can be set via the <code>outputFormat</code> option.</p>
+<p>  If determination of the ePO unique identifier fails, the first parameter
+  supplied to the callback contains an <code>Error</code> object with failure details.
+  An <code>Error</code> object could be delivered for any of the following conditions:</p>
+<ul>
+<li>No value is provided for the <code>epoUniqueId</code> parameter during client
+construction and zero or more than 1 ePO service is found on the DXL
+fabric.</li>
+<li>A value is provided for the <code>epoUniqueId</code> parameter during client
+construction but no ePO service matching the id is found on the DXL
+fabric.</li>
+<li>An error occurs when trying to make DXL requests to the broker to
+query for available ePO services.</li>
+</ul></td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>params</code></td>
             
 
@@ -1228,8 +1214,6 @@ with.</p>
 
             
                 <td class="default">
-                
-                    {}
                 
                 </td>
             
@@ -1324,7 +1308,7 @@ with.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line575">line 575</a>
+        <a href="epo-client.js.html">epo-client.js</a>, <a href="epo-client.js.html#line643">line 643</a>
     </li></ul></dd>
     
 
@@ -1385,14 +1369,16 @@ with.</p>
         <p class="code-caption">Example Usage</p>
     
     <pre class="prettyprint"><code>epoClient.runCommand('system.find',
-  function (searchError, responseText) {
-    if (searchError) {
-      console.log('Error finding system: ' + searchError.message)
-    } else {
-      console.log(JSON.stringify(responseObj, null, 2))
-    }
-  },
-  {params: {searchText: 'mySystem'}}
+  {
+    responseCallback: function (searchError, responseObj) {
+      if (searchError) {
+        console.log('Error finding system: ' + searchError.message)
+      } else {
+        console.log(JSON.stringify(responseObj, null, 2))
+      }
+    },
+    params: {searchText: 'mySystem'}
+  }
 )</code></pre>
 
         <p class="code-caption">Example Response Text</p>
