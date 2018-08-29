@@ -85,29 +85,20 @@ var EPO_UNIQUE_ID = null
 // when the connection has been established
 client.connect(function () {
   // Create the ePO client
-  var epoClient = new EpoClient(client, EPO_UNIQUE_ID,
-    function (clientError) {
-      if (clientError) {
-        // Destroy the client - frees up resources so that the application
-        // stops running
-        client.destroy()
-        console.log('Error creating ePO client: ' + clientError.message)
-      } else {
-        // Run the help command
-        epoClient.help(function (helpError, helpText) {
-          // Destroy the client - frees up resources so that the application
-          // stops running
-          client.destroy()
-          if (helpError) {
-            console.log('Error getting help: ' + helpError.message)
-          } else {
-            // Display the help
-            console.log(helpText)
-          }
-        })
-      }
+  var epoClient = new EpoClient(client, EPO_UNIQUE_ID)
+
+  // Run the help command
+  epoClient.help(function (helpError, helpText) {
+    // Destroy the client - frees up resources so that the application
+    // stops running
+    client.destroy()
+    if (helpError) {
+      console.log('Error getting help: ' + helpError.message)
+    } else {
+      // Display the help
+      console.log(helpText)
     }
-  )
+  })
 })
 ```
 
@@ -116,14 +107,16 @@ supplied to the DXL client instance's
 [connect()](https://opendxl.github.io/opendxl-client-javascript/jsdoc/Client.html#connect)
 method will be invoked. From within the callback function, an {@link EpoClient}
 instance is created. The EpoClient instance will be used to invoke remote
-commands on the ePO server. The `unique identifier` of the ePO server to invoke
-remote commands on is specified as an parameter to the client constructor. In
-this particular case, a value of `null` is specified, which triggers the client
-to automatically determine the ePO server's unique identifier. This will not
-work if multiple ePO servers are connected to the fabric (an error will be
-delivered in the `clientError` parameter passed into the callback function).
+commands on the ePO server.
+
+The `unique identifier` of the ePO server to invoke remote commands on is
+specified as an parameter to the client constructor. In this particular case, a
+value of `null` is specified, which triggers the client to automatically
+determine the ePO server's unique identifier.
 
 Next, the EpoClient instance's [help()]{@link EpoClient#help} method is called
 to invoke the `help` remote command on the ePO server. On successful execution
 of the ePO remote command, the `helpText` parameter provided to the callback
-function contains the command results.
+function contains the command results. If the help command fails due to zero or
+multiple ePO servers being connected to the fabric, an error with failure
+details will be provided to the `searchError` parameter.

@@ -38,30 +38,23 @@ var SEARCH_TEXT = '<specify-find-search-text>'
 // when the connection has been established
 client.connect(function () {
   // Create the ePO client
-  var epoClient = new EpoClient(client, EPO_UNIQUE_ID,
-    function (clientError) {
-      if (clientError) {
+  var epoClient = new EpoClient(client, EPO_UNIQUE_ID)
+
+  // Run the system find command
+  epoClient.runCommand('system.find',
+    {
+      responseCallback: function (searchError, responseObj) {
         // Destroy the client - frees up resources so that the application
         // stops running
         client.destroy()
-        console.log('Error creating ePO client: ' + clientError.message)
-      } else {
-        // Run the system find command
-        epoClient.runCommand('system.find',
-          function (searchError, responseObj) {
-            // Destroy the client - frees up resources so that the application
-            // stops running
-            client.destroy()
-            if (searchError) {
-              console.log('Error finding system: ' + searchError.message)
-            } else {
-              // Display the results
-              console.log(MessageUtils.objectToJson(responseObj, true))
-            }
-          },
-          {params: {searchText: SEARCH_TEXT}}
-        )
-      }
+        if (searchError) {
+          console.log('Error finding system: ' + searchError.message)
+        } else {
+          // Display the results
+          console.log(MessageUtils.objectToJson(responseObj, true))
+        }
+      },
+      params: {searchText: SEARCH_TEXT}
     }
   )
 })

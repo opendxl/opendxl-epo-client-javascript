@@ -31,27 +31,18 @@ var EPO_UNIQUE_ID = null
 // when the connection has been established
 client.connect(function () {
   // Create the ePO client
-  var epoClient = new EpoClient(client, EPO_UNIQUE_ID,
-    function (clientError) {
-      if (clientError) {
-        // Destroy the client - frees up resources so that the application
-        // stops running
-        client.destroy()
-        console.log('Error creating ePO client: ' + clientError.message)
-      } else {
-        // Run the help command
-        epoClient.help(function (helpError, helpText) {
-          // Destroy the client - frees up resources so that the application
-          // stops running
-          client.destroy()
-          if (helpError) {
-            console.log('Error getting help: ' + helpError.message)
-          } else {
-            // Display the help
-            console.log(helpText)
-          }
-        })
-      }
+  var epoClient = new EpoClient(client, EPO_UNIQUE_ID)
+
+  // Run the help command
+  epoClient.help(function (helpError, helpText) {
+    // Destroy the client - frees up resources so that the application
+    // stops running
+    client.destroy()
+    if (helpError) {
+      console.log('Error getting help: ' + helpError.message)
+    } else {
+      // Display the help
+      console.log(helpText)
     }
-  )
+  })
 })

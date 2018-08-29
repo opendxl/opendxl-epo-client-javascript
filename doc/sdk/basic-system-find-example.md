@@ -91,30 +91,23 @@ var SEARCH_TEXT = 'broker'
 // when the connection has been established
 client.connect(function () {
   // Create the ePO client
-  var epoClient = new EpoClient(client, EPO_UNIQUE_ID,
-    function (clientError) {
-      if (clientError) {
+  var epoClient = new EpoClient(client, EPO_UNIQUE_ID)
+
+  // Run the system find command
+  epoClient.runCommand('system.find',
+    {
+      responseCallback: function (searchError, responseObj) {
         // Destroy the client - frees up resources so that the application
         // stops running
         client.destroy()
-        console.log('Error creating ePO client: ' + clientError.message)
-      } else {
-        // Run the system find command
-        epoClient.runCommand('system.find',
-          function (searchError, responseObj) {
-            // Destroy the client - frees up resources so that the application
-            // stops running
-            client.destroy()
-            if (searchError) {
-              console.log('Error finding system: ' + searchError.message)
-            } else {
-              // Display the results
-              console.log(MessageUtils.objectToJson(responseObj, true))
-            }
-          },
-          {params: {searchText: SEARCH_TEXT}}
-        )
-      }
+        if (searchError) {
+          console.log('Error finding system: ' + searchError.message)
+        } else {
+          // Display the results
+          console.log(MessageUtils.objectToJson(responseObj, true))
+        }
+      },
+      params: {searchText: SEARCH_TEXT}
     }
   )
 })
@@ -125,19 +118,21 @@ supplied to the DXL client instance's
 [connect()](https://opendxl.github.io/opendxl-client-javascript/jsdoc/Client.html#connect)
 method will be invoked. From within the callback function, an {@link EpoClient}
 instance is created. The EpoClient instance will be used to invoke remote
-commands on the ePO server. The `unique identifier` of the ePO server to invoke
-remote commands on is specified as an parameter to the client constructor. In
-this particular case, a value of `null` is specified, which triggers the client
-to automatically determine the ePO server's unique identifier. This will not
-work if multiple ePO servers are connected to the fabric (an error will be
-delivered in the `clientError` parameter passed into the callback function).
+commands on the ePO server.
+
+The `unique identifier` of the ePO server to invoke remote commands on is
+specified as an parameter to the client constructor. In this particular case, a
+value of `null` is specified, which triggers the client to automatically
+determine the ePO server's unique identifier.
 
 Next, the EpoClient instance's [runCommand()]{@link EpoClient#runCommand} method
 is called to invoke the `system.find` remote command on the ePO server with a
 `searchText` parameter that is specified with the value of `broker`. On
 successful execution of the ePO remote command, the `responseObj` parameter
 provided to the callback function, a JavaScript `object`, contains the command
-results.
+results. If the remote command fails due to zero or multiple ePO servers being
+connected to the fabric, an error with failure details will be provided to the
+`searchError` parameter.
 
 Finally, the JavaScript response object is formatted as a pretty-printed string
 via a call to the
