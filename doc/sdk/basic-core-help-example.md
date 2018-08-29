@@ -119,4 +119,4 @@ to invoke the `help` remote command on the ePO server. On successful execution
 of the ePO remote command, the `helpText` parameter provided to the callback
 function contains the command results. If the help command fails due to zero or
 multiple ePO servers being connected to the fabric, an error with failure
-details will be provided to the `searchError` parameter.
+details will be provided to the `helpError` parameter.
