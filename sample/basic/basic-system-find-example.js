@@ -16,29 +16,29 @@
 
 'use strict'
 
-var common = require('../common')
-var dxl = common.require('@opendxl/dxl-client')
-var MessageUtils = common.require('@opendxl/dxl-bootstrap').MessageUtils
-var epo = common.require('@opendxl/dxl-epo-client')
-var EpoClient = epo.EpoClient
+const common = require('../common')
+const dxl = common.require('@opendxl/dxl-client')
+const MessageUtils = common.require('@opendxl/dxl-bootstrap').MessageUtils
+const epo = common.require('@opendxl/dxl-epo-client')
+const EpoClient = epo.EpoClient
 
 // Create DXL configuration from file
-var config = dxl.Config.createDxlConfigFromFile(common.CONFIG_FILE)
+const config = dxl.Config.createDxlConfigFromFile(common.CONFIG_FILE)
 
 // Create the client
-var client = new dxl.Client(config)
+const client = new dxl.Client(config)
 
 // The ePO unique identifier
-var EPO_UNIQUE_ID = null
+const EPO_UNIQUE_ID = null
 
 // The search text
-var SEARCH_TEXT = '<specify-find-search-text>'
+const SEARCH_TEXT = '<specify-find-search-text>'
 
 // Connect to the fabric, supplying a callback function which is invoked
 // when the connection has been established
 client.connect(function () {
   // Create the ePO client
-  var epoClient = new EpoClient(client, EPO_UNIQUE_ID)
+  const epoClient = new EpoClient(client, EPO_UNIQUE_ID)
 
   // Run the system find command
   epoClient.runCommand('system.find',
@@ -54,7 +54,7 @@ client.connect(function () {
           console.log(MessageUtils.objectToJson(responseObj, true))
         }
       },
-      params: {searchText: SEARCH_TEXT}
+      params: { searchText: SEARCH_TEXT }
     }
   )
 })
