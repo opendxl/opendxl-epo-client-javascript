@@ -14,24 +14,24 @@
 
 'use strict'
 
-var common = require('../common')
-var dxl = common.require('@opendxl/dxl-client')
-var EpoClient = common.require('@opendxl/dxl-epo-client').EpoClient
+const common = require('../common')
+const dxl = common.require('@opendxl/dxl-client')
+const EpoClient = common.require('@opendxl/dxl-epo-client').EpoClient
 
 // Create DXL configuration from file
-var config = dxl.Config.createDxlConfigFromFile(common.CONFIG_FILE)
+const config = dxl.Config.createDxlConfigFromFile(common.CONFIG_FILE)
 
 // Create the client
-var client = new dxl.Client(config)
+const client = new dxl.Client(config)
 
 // The ePO unique identifier
-var EPO_UNIQUE_ID = null
+const EPO_UNIQUE_ID = null
 
 // Connect to the fabric, supplying a callback function which is invoked
 // when the connection has been established
 client.connect(function () {
   // Create the ePO client
-  var epoClient = new EpoClient(client, EPO_UNIQUE_ID)
+  const epoClient = new EpoClient(client, EPO_UNIQUE_ID)
 
   // Run the help command
   epoClient.help(function (helpError, helpText) {
